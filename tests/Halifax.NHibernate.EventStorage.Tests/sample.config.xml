@@ -1,0 +1,37 @@
+﻿<configuration>
+  <facilities>
+
+    <facility id="axiom">
+
+      <event-bus isAsync="false" />
+
+      <messages>
+        <add name="Axiom.NHibernate.EventStorage.Tests" />
+      </messages>
+
+      <!--
+      <endpoints>
+        <add name="Axiom.Tests"
+                 uri="localhost@axiom.tests"
+                 concurrency="1"
+                 frequency="1"/>
+      </endpoints>
+
+      <command-handlers>
+        <add name="Axiom.Tests" />
+      </command-handlers>
+      
+      <event-handlers>
+        <add name="Axiom.Tests" />
+      </event-handlers>
+      -->
+
+    </facility>
+
+  </facilities>
+
+  <components>
+
+  </components>
+
+</configuration>

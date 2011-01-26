@@ -1,0 +1,7 @@
+﻿Halifax :  A local implementation of developing domain models with command query separation
+
+The idea for this simple implementation came from the following sources with a little adaptation:
+
+Ncqrs Framework - The CQRS Framework for .NET — http://ncqrs.org 
+Mark Nihojf  - Fohjin Project ( https://github.com/MarkNijhof/Fohjin, blog: http://cre8ivethought.com/blog/index)
+

@@ -1,0 +1,23 @@
+﻿<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Axiom.NHibernate.EventStorage"
+                   namespace="Axiom.NHibernate.EventStorage.Entities"
+                   default-lazy="false">
+
+  <!-- entity: StoredEvent -->
+  <class name="StoredEvent" table="Events">
+
+    <id name="Id" column="Id" type="System.Int32" access="nosetter.camelcase-underscore">
+      <generator class="identity" />
+    </id>
+
+    <!-- properties for entity 'StoredEvent' -->
+    <property name="EventSourceId" column="eventSourceId" type="System.Guid"  />
+    <property name="Version" column="version" type="System.Int32" />
+    <property name="Timestamp" column="timeStamp" type="System.DateTime"  />
+    <property name="Data" column="data" type="System.Byte[]" length="8500"  />
+    <property name="Name" column="name" type="String" length="255"  />
+    
+  </class>
+
+</hibernate-mapping>
+

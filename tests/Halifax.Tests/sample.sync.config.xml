@@ -1,0 +1,28 @@
+﻿<configuration>
+  <facilities>
+
+    <facility id="halifax">
+
+      <event-bus isAsync="false" />
+
+      <messages>
+        <add name="Halifax.Tests" />
+      </messages>
+      
+      <command-handlers>
+        <add name="Halifax.Tests" />
+      </command-handlers>
+      
+      <event-handlers>
+        <add name="Halifax.Tests" />
+      </event-handlers>
+
+    </facility>
+
+  </facilities>
+
+  <components>
+
+  </components>
+
+</configuration>

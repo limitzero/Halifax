@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{765A475E-A165-4401-88E1-004BFF121FF1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Halifax.Tests</RootNamespace>
+    <AssemblyName>Halifax.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy2, Version=2.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Castle.DynamicProxy2.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.MicroKernel, Version=2.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Castle.MicroKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.1.0.584, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tools\rhinoMocks\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="xunit, Version=1.5.0.1479, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\xunit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractAggregateRootTests.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\Account.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\AccountEventConsumer.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\CreateAccount\AccountCreatedEvent.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\CreateAccount\AccountCreatedEventHandler.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\CreateAccount\CreateAccountCommandConsumer.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\AccountChangedEvent.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\DepositCash\CashDepositedEvent.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\DepositCash\CashDepositedEventConsumer.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\DepositCash\DepositCashCommand.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\DepositCash\DepositCashCommandConsumer.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\DepositTypes.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\WithdrawCash\CashWithDrawnEvent.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\WithdrawCash\CashWithdrawnEventConsumer.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\WithdrawCash\WithdrawCashCommand.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\Exceptions\WithdrawalAmountExceedsAvaliableFundsException.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\CreateAccount\CreateAccountCommand.cs" />
+    <Compile Include="Samples\ATM\ReadModel\AccountBalanceView.cs" />
+    <Compile Include="Samples\ATM\ReadModel\ReadModelDB.cs" />
+    <Compile Include="Samples\ATM\Tests\CreateAccountTests.cs" />
+    <Compile Include="Samples\ATM\Tests\DepositCashTests.cs" />
+    <Compile Include="Samples\ATM\Tests\ViewCurrentBalanceTests.cs" />
+    <Compile Include="Samples\ATM\Tests\WithdrawCashTests.cs" />
+    <Compile Include="Samples\ATM\Domain\Accounts\WithdrawCash\WithdrawCashCommandConsumer.cs" />
+    <Compile Include="Commanding\CommandBusTests.cs" />
+    <Compile Include="Commanding\CommandHandlerTests.cs" />
+    <Compile Include="IoC.cs" />
+    <Compile Include="Samples\ProductTests.cs" />
+    <Compile Include="Internals\InMemoryDomainRepositoryTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\AddItem\AddItemToCartCommand.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\AddItem\AddItemToCartCommandConsumer.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\AddItem\ItemAddedToCartEvent.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\AddItem\ItemAddedToCartEventConsumer.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\CreateCart\CreateCartCommand.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\CreateCart\CreateCartCommandConsumer.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\CreateCart\CreateCartEvent.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\ReadModel\InProgressCartViewModel.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\ReadModel\ReadModelDB.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\RemoveItem\ItemRemovedFromCartEvent.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\RemoveItem\RemoveItemCommand.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\RemoveItem\RemoveItemFromCartCommandConsumer.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\ShoppingCart.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\ShoppingCartItem.cs" />
+    <Compile Include="Samples\OnlineOrdering\Tests\AddItemToCartTests.cs" />
+    <Compile Include="Samples\OnlineOrdering\Tests\CreateShoppingCartTests.cs" />
+    <Compile Include="Samples\OnlineOrdering\Domain\AddItem\ItemAlreadyPresentInCartException.cs" />
+    <Compile Include="Samples\OnlineOrdering\Tests\InProgressCartViewTests.cs" />
+    <Compile Include="Samples\OnlineOrdering\Tests\RemoveItemFromCartTests.cs" />
+    <Compile Include="sample_domain.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sample.sync.config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sample.async.config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Halifax\Halifax.csproj">
+      <Project>{22DC224C-93DA-43F7-A919-9A6DD5D0FCA3}</Project>
+      <Name>Halifax</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Samples\ATM\Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

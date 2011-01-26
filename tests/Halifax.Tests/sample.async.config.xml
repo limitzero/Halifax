@@ -1,0 +1,35 @@
+﻿<configuration>
+  <facilities>
+
+    <facility id="halifax">
+
+      <event-bus isAsync="true" />
+
+      <messages>
+        <add name="Halifax.Tests" />
+      </messages>
+
+      <endpoints>
+        <add name="Halifax.Tests"
+                 uri="localhost@halifax.tests">
+          <concurrency max="1" wait="5"/>
+        </add>
+      </endpoints>
+
+      <command-handlers>
+        <add name="Halifax.Tests" />
+      </command-handlers>
+
+      <event-handlers>
+        <add name="Halifax.Tests" />
+      </event-handlers>
+
+    </facility>
+
+  </facilities>
+
+  <components>
+
+  </components>
+
+</configuration>
