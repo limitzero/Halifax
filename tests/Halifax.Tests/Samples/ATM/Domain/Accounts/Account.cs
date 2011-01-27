@@ -52,7 +52,7 @@ namespace Halifax.Tests.Samples.ATM.Domain.Accounts
                 throw new WithdrawalAmountExceedsAvaliableFundsException(command.WithdrawalAmount, _balance);
         }
 
-        public void OnAccountCreatedEvent(AccountCreatedEvent domainEvent)
+        private void OnAccountCreatedEvent(AccountCreatedEvent domainEvent)
         {
             // UC1: create the account and assign a business specific 
             // account number for compliance purposes.
@@ -63,12 +63,12 @@ namespace Halifax.Tests.Samples.ATM.Domain.Accounts
             _balance = domainEvent.InitialAmount;
         }
 
-        public void OnCashDepositedEvent(CashDepositedEvent domainEvent)
+        private void OnCashDepositedEvent(CashDepositedEvent domainEvent)
         {
             _balance += domainEvent.DepositAmount;
         }
 
-        public void OnCashWithdrawnEvent(CashWithdrawnEvent domainEvent)
+        private void OnCashWithdrawnEvent(CashWithdrawnEvent domainEvent)
         {            
             _balance -= domainEvent.WithdrawalAmount;
         }

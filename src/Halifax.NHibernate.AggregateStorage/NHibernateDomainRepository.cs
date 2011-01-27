@@ -4,10 +4,10 @@ using System.Linq;
 using Castle.MicroKernel;
 using Halifax.Bus.Eventing;
 using Halifax.Events;
+using Halifax.Internals.Serialization;
 using Halifax.NHibernate.AggregateStorage.Entities;
 using Halifax.Storage.Aggregates;
 using Halifax.Storage.Events;
-using Halifax.Storage.Internals.Serialization;
 using NHibernate.Criterion;
 
 namespace Halifax.NHibernate.AggregateStorage

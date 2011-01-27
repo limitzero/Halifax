@@ -5,7 +5,7 @@ using Halifax.Bus.Eventing.Async.Pipeline.Module;
 using Halifax.Bus.Eventing.Async.Subscriptions;
 using Halifax.Bus.Eventing.Async.Transport;
 using Halifax.Eventing;
-using Halifax.Storage.Internals.Serialization;
+using Halifax.Internals.Serialization;
 
 namespace Halifax.Bus.Eventing.Async.Pipeline
 {

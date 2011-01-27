@@ -6,6 +6,11 @@ using Halifax.Commanding;
 
 namespace Halifax.Configuration.Infrastructure
 {
+    /// <summary>
+    /// Local communication context to abstract the internals away 
+    /// from the client code for passing commands onto the consumers
+    /// for invoking actions on the aggregates.
+    /// </summary>
     public class HalifaxContext : IDisposable
     {
         private const string _default_configuration_file = @"halifax.config.xml";
@@ -43,8 +48,6 @@ namespace Halifax.Configuration.Infrastructure
             BootstrapFrom(configurationFile);
         }
 
-        #region IDisposable Members
-
         public void Dispose()
         {
             if (_commadBus.IsRunning)
@@ -56,8 +59,6 @@ namespace Halifax.Configuration.Infrastructure
             if (_container != null)
                 _container.Dispose();
         }
-
-        #endregion
 
         /// <summary>
         /// This will read the default configuration file that configures 
@@ -82,7 +83,7 @@ namespace Halifax.Configuration.Infrastructure
         /// <param name="configurationFile"></param>
         public void BootstrapFrom(string configurationFile)
         {
-            if (_container != null) return;
+            if (_container != null) return; // already configured
 
             if (!string.IsNullOrEmpty(configurationFile))
                 _container = new WindsorContainer(configurationFile);
@@ -109,7 +110,7 @@ namespace Halifax.Configuration.Infrastructure
         {
             if (_container == null)
                 throw new Exception(
-                    "Before sending the command, make sure to invoke the BootStrap() or BootStrapFrom(..) methods to initialize the communcation context.");
+                    "Before sending the command, make sure to invoke the BootStrap() or BootStrapFrom(...) methods to initialize the communcation context.");
 
             if (!_commadBus.IsRunning)
                 throw new Exception("The current environment has not been started for sending commands.");

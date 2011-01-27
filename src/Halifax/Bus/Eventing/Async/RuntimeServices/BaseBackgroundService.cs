@@ -2,8 +2,8 @@ using System;
 using System.Threading;
 using System.Timers;
 using System.Transactions;
-using Halifax.Storage.Internals;
-using Halifax.Storage.Internals.Threading;
+using Halifax.Internals;
+using Halifax.Internals.Threading;
 using Timer=System.Timers.Timer;
 
 namespace Halifax.Bus.Eventing.Async.RuntimeServices

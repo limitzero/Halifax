@@ -1,7 +1,5 @@
-using Halifax;
 using Halifax.Commanding;
 using Halifax.Storage.Aggregates;
-using Halifax.Tests.Samples.OnlineOrdering.Domain;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.RemoveItem
 {
@@ -15,11 +13,15 @@ namespace Halifax.Tests.Samples.OnlineOrdering.Domain.RemoveItem
             _repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, RemoveItemFromCartCommand command)
+        public override void Execute(IUnitOfWork session, RemoveItemFromCartCommand command)
         {
             var cart = _repository.Find<ShoppingCart>(command.CartId);
-            cart.RemoveItem(command.SKU);
-            session.Accept(cart);
+
+            using (ITransactedSession txn = session.BeginTransaction(cart))
+            {
+                cart.RemoveItem(command.SKU);
+            }
+            
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using Halifax.Eventing;
 using Halifax.Events;
 using Halifax.Exceptions;
-using Halifax.Storage.Internals.Convertor;
+using Halifax.Internals.Convertor;
 
 namespace Halifax
 {
@@ -34,8 +34,20 @@ namespace Halifax
         private readonly Dictionary<Type, Action<IDomainEvent>> _registeredEvents;
 
         [XmlIgnore]
-        private List<IEventConvertor> _convertors;
+        private readonly List<IEventConvertor> _convertors;
 
+        [XmlIgnore]
+        public Func<bool> IsSnapshotPeriodElapsed { get; set; }
+
+        public Guid Id { get; set; }
+
+        public int Version { get; set; }
+
+        public int EventingThresholdCount { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of an entity that acts as an aggregate root.
+        /// </summary>
         protected AbstractAggregateRoot()
         {
             if (_recordedEvents == null)
@@ -55,20 +67,6 @@ namespace Halifax
             RegisterEvents();
             RegisterEventConvertors();
         }
-
-        public int EventingThresholdCount { get; set; }
-
-        [XmlIgnore]
-        public Func<bool> IsSnapshotPeriodElapsed { get; set; }
-
-        #region IAggregateRoot Members
-
-        public Guid Id { get; set; }
-        public int Version { get; set; }
-
-        #endregion
-
-        #region IEventProvider Members
 
         public void Clear()
         {
@@ -129,8 +127,6 @@ namespace Halifax
                 }
             }
         }
-
-        #endregion
 
         #region ISnapshotable Members
 
@@ -228,18 +224,29 @@ namespace Halifax
             }
         }
 
+        /// <summary>
+        /// This will prepare the current event for synchronization with the aggregate root.
+        /// </summary>
+        /// <typeparam name="TEvent"></typeparam>
+        /// <param name="domainEvent"></param>
+        /// <returns></returns>
         protected TEvent PrepareDomainEvent<TEvent>(TEvent domainEvent) where TEvent : class, IDomainEvent
         {
             domainEvent.Version = Version;
             domainEvent.AggregateId = Id;
             domainEvent.EventDateTime = DateTime.Now;
 
-            if (string.IsNullOrEmpty(domainEvent.Who))
+            if (string.IsNullOrEmpty(domainEvent.Who) == true)
+            {
                 domainEvent.Who = Thread.CurrentPrincipal.Identity.Name;
+            }
 
             return domainEvent;
         }
 
+        /// <summary>
+        /// This will update the current version of the aggregate root to match all corresponding events against.
+        /// </summary>
         protected void GetVersion()
         {
             Version++;

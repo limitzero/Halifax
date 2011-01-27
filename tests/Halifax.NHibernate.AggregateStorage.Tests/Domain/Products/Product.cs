@@ -1,10 +1,10 @@
-using Axiom.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts;
 using System;
+using Halifax.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts;
 
-namespace Axiom.NHibernate.AggregateStorage.Tests.Domain.Products
+namespace Halifax.NHibernate.AggregateStorage.Tests.Domain.Products
 {
     [Serializable]
-    public class Product : AbstractAggregateRoot
+    public class Product : AbstractAggregateRootByConvention
     {
         // local state:
         private string _name;
@@ -12,7 +12,7 @@ namespace Axiom.NHibernate.AggregateStorage.Tests.Domain.Products
 
         public override void RegisterEvents()
         {
-            RegisterEvent<ProductCreatedEvent>(OnProductCreatedEvent);
+            // RegisterEvent<ProductCreatedEvent>(OnProductCreatedEvent);
         }
 
         public void Create(CreateProductCommand command)

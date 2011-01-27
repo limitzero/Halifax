@@ -10,21 +10,22 @@ namespace Halifax
     /// <summary>
     /// Default unit of work session to persist the events
     /// to the event store and send the events to the 
-    /// custom event consumers via the event bus.
+    /// custom event consumers via the event bus. This is 
+    /// injected into every command consumer to ensure
+    /// consistency in the proliferation of events to the storage
+    /// mechanism.
     /// </summary>
-    public class UnitOfWorkSession : IUnitOfWorkSession
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly IStartableEventBus _eventBus;
         private readonly IEventStorage _eventStorage;
 
-        public UnitOfWorkSession(IEventStorage eventStorage,
+        public UnitOfWork(IEventStorage eventStorage,
                                  IStartableEventBus eventBus)
         {
             _eventStorage = eventStorage;
             _eventBus = eventBus;
         }
-
-        #region IUnitOfWorkSession Members
 
         public object CurrentCommand { get; set; }
 
@@ -52,6 +53,14 @@ namespace Halifax
             }
         }
 
-        #endregion
+        public ITransactedSession BeginTransaction(AbstractAggregateRoot root)
+        {
+            return BeginTransaction(root, TransactionScopeOption.RequiresNew);
+        }
+
+        public ITransactedSession BeginTransaction(AbstractAggregateRoot root, TransactionScopeOption option)
+        {
+            return new TransactedSession(_eventStorage, _eventBus, root, option);
+        }
     }
 }

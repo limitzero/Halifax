@@ -12,7 +12,7 @@ namespace Halifax.Configuration.Elements
     /// <event-handlers>
     ///    <add name="{full namespace of assembly for event handler}" />
     ///    ...
-    /// </messages>
+    /// </event-handlers>
     /// </summary>
     public class EventHandlerElementBuilder : AbstractElementBuilder
     {

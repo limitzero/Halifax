@@ -3,6 +3,9 @@ using Halifax.Tests.Samples.ATM.Domain.Accounts;
 
 namespace Halifax.Tests.Samples.ATM.Domain.Accounts.WithdrawCash
 {
+    /// <summary>
+    /// Event denoting that cash has been withdrawn for an account.
+    /// </summary>
     [Serializable]
     public class CashWithdrawnEvent : AccountChangedEvent
     {

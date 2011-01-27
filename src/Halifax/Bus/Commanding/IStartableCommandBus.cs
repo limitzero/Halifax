@@ -1,5 +1,5 @@
 using System;
-using Halifax.Storage.Internals;
+using Halifax.Internals;
 
 namespace Halifax.Bus.Commanding
 {

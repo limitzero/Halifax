@@ -129,7 +129,7 @@ namespace Halifax.Tests
                 ApplyEvent(ev);
             }
 
-            public void OnEntityCreatedEvent(EntityCreatedEvent domainEvent)
+            private void OnEntityCreatedEvent(EntityCreatedEvent domainEvent)
             {
                 _isCreatedEventFired = true;
 
@@ -139,7 +139,7 @@ namespace Halifax.Tests
 
             // here is the aggregate event handler that will be called 
             // for upgrading the event:
-            public void OnEntityCreatedEvent2(EntityCreatedEvent2 domainEvent)
+            private void Apply(EntityCreatedEvent2 domainEvent)
             {
                 _convertedEventCount++;
 

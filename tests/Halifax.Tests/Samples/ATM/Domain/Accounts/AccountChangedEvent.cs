@@ -9,6 +9,9 @@ namespace Halifax.Tests.Samples.ATM.Domain.Accounts
     [Serializable]
     public class AccountChangedEvent : DomainEvent
     {
+        /// <summary>
+        /// Gets or sets the account number that the event will be recorded for.
+        /// </summary>
         public string AccountNumber { get; set; }
     }
 }

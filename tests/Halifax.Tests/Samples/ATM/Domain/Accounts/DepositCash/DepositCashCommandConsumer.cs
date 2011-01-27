@@ -15,11 +15,15 @@ namespace Halifax.Tests.Samples.ATM.Domain.Accounts.DepositCash
             _repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, DepositCashCommand command)
+        public override void Execute(IUnitOfWork session, DepositCashCommand command)
         {
             var account = _repository.Find<Account>(command.Id);
-            account.MakeCashDeposit(command);
-            session.Accept(account);
+
+            using (ITransactedSession txn = session.BeginTransaction(account))
+            {
+                account.MakeCashDeposit(command);
+            }
+
         }
     }
 }

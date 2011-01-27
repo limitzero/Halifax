@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halfax.NHibernate.Aggregate
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate.EventStorage", "src\Halifax.NHibernate.EventStorage\Halifax.NHibernate.EventStorage.csproj", "{752AC0C5-AF9D-49BB-978F-A23C834BC467}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate.AggregateStorage.Tests", "tests\Halifax.NHibernate.AggregateStorage.Tests\Halifax.NHibernate.AggregateStorage.Tests.csproj", "{66452119-0D43-4F1F-BBCD-C8467FF6EB43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate.EventStorage.Tests", "tests\Halifax.NHibernate.EventStorage.Tests\Halifax.NHibernate.EventStorage.Tests.csproj", "{38661C55-363E-4175-8BA4-C4C326E5A2EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,12 +41,22 @@ Global
 		{752AC0C5-AF9D-49BB-978F-A23C834BC467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{752AC0C5-AF9D-49BB-978F-A23C834BC467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{752AC0C5-AF9D-49BB-978F-A23C834BC467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66452119-0D43-4F1F-BBCD-C8467FF6EB43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66452119-0D43-4F1F-BBCD-C8467FF6EB43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66452119-0D43-4F1F-BBCD-C8467FF6EB43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66452119-0D43-4F1F-BBCD-C8467FF6EB43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38661C55-363E-4175-8BA4-C4C326E5A2EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38661C55-363E-4175-8BA4-C4C326E5A2EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38661C55-363E-4175-8BA4-C4C326E5A2EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38661C55-363E-4175-8BA4-C4C326E5A2EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{765A475E-A165-4401-88E1-004BFF121FF1} = {2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}
+		{66452119-0D43-4F1F-BBCD-C8467FF6EB43} = {2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}
+		{38661C55-363E-4175-8BA4-C4C326E5A2EE} = {2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}
 		{4430D605-DD78-4AF6-92A8-99B9A54D68E0} = {2C15E76B-E7C5-416C-A386-6E87A4928609}
 		{752AC0C5-AF9D-49BB-978F-A23C834BC467} = {2C15E76B-E7C5-416C-A386-6E87A4928609}
 	EndGlobalSection

@@ -16,9 +16,14 @@ namespace Halifax
         ISnapshotable,
         IEventPublisher
     {
-        [XmlIgnore] private readonly List<IDomainEvent> _recordedEvents;
-        [XmlIgnore] private readonly Dictionary<Type, Action<IDomainEvent>> _registeredEvents;
-        [XmlIgnore] private IEventBus _publisher;
+        [XmlIgnore] 
+        private readonly List<IDomainEvent> _recordedEvents;
+
+        [XmlIgnore] 
+        private readonly Dictionary<Type, Action<IDomainEvent>> _registeredEvents;
+
+        [XmlIgnore] 
+        private IEventBus _publisher;
 
         protected BaseEntity()
         {

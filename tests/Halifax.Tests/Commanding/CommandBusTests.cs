@@ -107,7 +107,7 @@ namespace Halifax.Tests.Commanding
         public class SampleCommandConsumer
             : CommandConsumer.For<SampleCommand>
         {
-            public override void Execute(IUnitOfWorkSession session, SampleCommand command)
+            public override void Execute(IUnitOfWork session, SampleCommand command)
             {
                 _received_command = command;
                 _wait.Set();
@@ -124,7 +124,7 @@ namespace Halifax.Tests.Commanding
                 _repository = repository;
             }
 
-            public override void Execute(IUnitOfWorkSession session, SampleDoWorkCommand theCommand)
+            public override void Execute(IUnitOfWork session, SampleDoWorkCommand theCommand)
             {
                 var sample = _repository.Create<Sample>();
                 sample.DoWork();

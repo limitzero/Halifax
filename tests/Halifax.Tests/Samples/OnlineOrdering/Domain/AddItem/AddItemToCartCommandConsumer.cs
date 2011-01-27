@@ -1,7 +1,5 @@
-using Halifax;
 using Halifax.Commanding;
 using Halifax.Storage.Aggregates;
-using Halifax.Tests.Samples.OnlineOrdering.Domain;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.AddItem
 {
@@ -15,11 +13,15 @@ namespace Halifax.Tests.Samples.OnlineOrdering.Domain.AddItem
             _repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, AddItemToCartCommand command)
+        public override void Execute(IUnitOfWork session, AddItemToCartCommand command)
         {
             var cart = _repository.Find<ShoppingCart>(command.CartId);
-            cart.AddItem(command.Username, command.SKU, command.Quantity);
-            session.Accept(cart);
+
+            using (ITransactedSession txn = session.BeginTransaction(cart))
+            {
+                cart.AddItem(command.Username, command.SKU, command.Quantity);
+            }
+            
         }
     }
 }

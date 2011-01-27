@@ -26,8 +26,9 @@ namespace Halifax.Tests.Samples.OnlineOrdering.Tests
         [Fact]
         public void it_will_setup_the_cart_to_be_valid_for_five_minutes()
         {
+            var now = System.DateTime.Now;
             Assert.Equal(_username, PublishedEvents.Latest<CartCreatedEvent>().Username);
-            var duration = PublishedEvents.Latest<CartCreatedEvent>().ValidUntil - System.DateTime.Now;
+            var duration = PublishedEvents.Latest<CartCreatedEvent>().ValidUntil - now;
             Assert.Equal(5, duration.Minutes);
         }
 

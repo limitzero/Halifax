@@ -4,11 +4,11 @@ using Halifax;
 using Halifax.Bus.Commanding;
 using Halifax.Commanding;
 using Halifax.Eventing;
+using Halifax.Internals.Dispatchers;
+using Halifax.Internals.Reflection;
 using Halifax.Storage.Aggregates;
 using Halifax.Storage.Events;
 using Halifax.Bus.Eventing;
-using Halifax.Storage.Internals.Dispatchers;
-using Halifax.Storage.Internals.Reflection;
 
 namespace Halifax.Tests
 {

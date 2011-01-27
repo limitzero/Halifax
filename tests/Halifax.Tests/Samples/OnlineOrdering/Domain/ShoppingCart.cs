@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Halifax;
 using Halifax.Tests.Samples.OnlineOrdering.Domain.AddItem;
 using Halifax.Tests.Samples.OnlineOrdering.Domain.CreateCart;
 using Halifax.Tests.Samples.OnlineOrdering.Domain.RemoveItem;
@@ -13,8 +12,13 @@ namespace Halifax.Tests.Samples.OnlineOrdering.Domain
         #region -- local state --
         private string _username;
         private DateTime _validUntil;
-        private List<ShoppingCartItem> _items = new List<ShoppingCartItem>();
+        private readonly List<ShoppingCartItem> _items;
         #endregion
+
+        public ShoppingCart()
+        {
+            _items = new List<ShoppingCartItem>();
+        }
 
         public void Create(string username)
         {
@@ -34,13 +38,13 @@ namespace Halifax.Tests.Samples.OnlineOrdering.Domain
             ApplyEvent(e);
         }
 
-        public void OnCartCreatedEvent(CartCreatedEvent @event)
+        private void OnCartCreatedEvent(CartCreatedEvent @event)
         {
             _username = @event.Username;
             _validUntil = @event.ValidUntil;
         }
 
-        public void OnItemAddedToCartEvent(ItemAddedToCartEvent @event)
+        private void OnItemAddedToCartEvent(ItemAddedToCartEvent @event)
         {
             GuardAgainstDuplicateItems(@event.SKU);
 
@@ -48,14 +52,16 @@ namespace Halifax.Tests.Samples.OnlineOrdering.Domain
             _items.Add(item);
         }
 
-        public void OnItemRemovedFromCartEvent(ItemRemovedFromCartEvent @event)
+        private void OnItemRemovedFromCartEvent(ItemRemovedFromCartEvent @event)
         {
             var toRemove = (from item in _items
                             where item.SKU == @event.SKU
                             select item).FirstOrDefault();
 
             if (toRemove != null)
+            {
                 _items.Remove(toRemove);
+            }
         }
 
         private void GuardAgainstDuplicateItems(string SKU)

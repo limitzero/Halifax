@@ -1,7 +1,7 @@
-using Axiom.Commanding;
-using Axiom.Storage.Aggregates;
+using Halifax.Commanding;
+using Halifax.Storage.Aggregates;
 
-namespace Axiom.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts
+namespace Halifax.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts
 {
     public class CreateProductCommandHandler : 
         CommandConsumer.For<CreateProductCommand>
@@ -13,10 +13,15 @@ namespace Axiom.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts
             _repository = repository;
         }
 
-        public override void Execute(CreateProductCommand command)
+        public override void Execute(IUnitOfWork session, CreateProductCommand command)
         {
             var product = _repository.Create<Product>();
-            product.Create(command);
+
+            using (ITransactedSession txn = session.BeginTransaction(product))
+            {
+                product.Create(command);
+            }
+
         }
     }
 }

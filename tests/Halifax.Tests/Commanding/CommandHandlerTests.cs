@@ -11,13 +11,13 @@ namespace Halifax.Tests.Commanding
         private IDomainRepository _repository;
         private TestCommandConsumer _consumer = null;
         private Guid _id = Guid.Empty;
-        private IUnitOfWorkSession _session;
+        private IUnitOfWork _session;
 
         public when_the_command_handler_is_invoked_with_a_command()
         {
             _mocks = new MockRepository();
             _repository = _mocks.DynamicMock<IDomainRepository>();
-            _session = _mocks.DynamicMock<IUnitOfWorkSession>();
+            _session = _mocks.DynamicMock<IUnitOfWork>();
             _consumer = new TestCommandConsumer(_repository);
             _id = Guid.NewGuid();
         }

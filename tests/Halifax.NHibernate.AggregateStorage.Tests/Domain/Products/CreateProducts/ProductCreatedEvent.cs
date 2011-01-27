@@ -1,6 +1,7 @@
-using Axiom.Eventing;
 using System;
-namespace Axiom.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts
+using Halifax.Eventing;
+
+namespace Halifax.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts
 {
     [Serializable]
     public class ProductCreatedEvent : DomainEvent

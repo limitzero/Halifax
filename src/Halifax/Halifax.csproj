@@ -100,7 +100,8 @@
     <Compile Include="Commanding\ICommandMessageDispatcher.cs" />
     <Compile Include="Commanding\IMessageDispatcher.cs" />
     <Compile Include="Exceptions\ConfigurationElementExceededLimitException.cs" />
-    <Compile Include="IUnitOfWorkSession.cs" />
+    <Compile Include="ITransactedSession.cs" />
+    <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Commanding\Module\AbstractCommandBusModule.cs" />
     <Compile Include="Configuration\AbstractElementBuilder.cs" />
     <Compile Include="Configuration\HalifaxFacility.cs" />
@@ -136,26 +137,26 @@
     <Compile Include="IAggregateRoot.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IMessage.cs" />
-    <Compile Include="Storage\Internals\Convertor\EventConvertor.cs" />
-    <Compile Include="Storage\Internals\Convertor\IEventConvertor.cs" />
-    <Compile Include="Storage\Internals\InMemoryMatchAllEventHandler.cs" />
-    <Compile Include="Storage\Internals\Reflection\DefaultReflection.cs" />
-    <Compile Include="Storage\Internals\Dispatchers\EventMessageDispatcher.cs" />
+    <Compile Include="Internals\Convertor\EventConvertor.cs" />
+    <Compile Include="Internals\Convertor\IEventConvertor.cs" />
+    <Compile Include="Internals\InMemoryMatchAllEventHandler.cs" />
+    <Compile Include="Internals\Reflection\DefaultReflection.cs" />
+    <Compile Include="Internals\Dispatchers\EventMessageDispatcher.cs" />
     <Compile Include="Eventing\IEventMessageDispatcher.cs" />
     <Compile Include="Storage\Events\InMemoryEventStorage.cs" />
-    <Compile Include="Storage\Internals\Reflection\IReflection.cs" />
+    <Compile Include="Internals\Reflection\IReflection.cs" />
     <Compile Include="Eventing\ISnapshotable.cs" />
-    <Compile Include="Storage\Internals\IStartable.cs" />
-    <Compile Include="Storage\Internals\Serialization\DataContractSerializationProvider.cs" />
-    <Compile Include="Storage\Internals\Serialization\ISerializationProvider.cs" />
-    <Compile Include="Storage\Internals\Threading\Threading.cs" />
+    <Compile Include="Internals\IStartable.cs" />
+    <Compile Include="Internals\Serialization\DataContractSerializationProvider.cs" />
+    <Compile Include="Internals\Serialization\ISerializationProvider.cs" />
+    <Compile Include="Internals\Threading\Threading.cs" />
     <Compile Include="Bus\Commanding\IStartableCommandBus.cs" />
     <Compile Include="Eventing\IDomainEvent.cs" />
     <Compile Include="Exceptions\UnregisteredEventHandlerOnAggregateForEventException.cs" />
     <Compile Include="Storage\Aggregates\IDomainRepository.cs" />
     <Compile Include="Storage\Events\IEventStorage.cs" />
     <Compile Include="Bus\Eventing\IEventBus.cs" />
-    <Compile Include="Storage\Internals\Dispatchers\CommandMessageDispatcher.cs" />
+    <Compile Include="Internals\Dispatchers\CommandMessageDispatcher.cs" />
     <Compile Include="Storage\Aggregates\DomainRepository.cs" />
     <Compile Include="Bus\Eventing\IStartableEventBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -167,12 +168,13 @@
     <Compile Include="Testing\NoExceptionWasCaughtButOneWasExpectedException.cs" />
     <Compile Include="Testing\ThePublishedEvents.cs" />
     <Compile Include="Testing\TheCaughtException.cs" />
+    <Compile Include="TransactedSession.cs" />
     <Compile Include="UnitOfWorkSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Credits.txt" />
     <Content Include="Mappings\PersistableEvent.hbm.xml" />
-    <Content Include="sample.config.xml" />
+    <Content Include="halifax.config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,11 +13,15 @@ namespace Halifax.Tests.Samples.ATM.Domain.Accounts.CreateAccount
             _repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, CreateAccountCommand command)
+        public override void Execute(IUnitOfWork session, CreateAccountCommand command)
         {
             var account = _repository.Create<Account>();
-            account.Create(command);
-            session.Accept(account);
+
+            using (ITransactedSession txn = session.BeginTransaction(account))
+            {
+                account.Create(command);
+            }
+           
         }
     }
 }

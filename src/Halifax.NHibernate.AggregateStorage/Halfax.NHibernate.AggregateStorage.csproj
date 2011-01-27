@@ -60,7 +60,7 @@
     <Compile Include="AggregateStorageSession.cs" />
     <Compile Include="IAggregateStorageSession.cs" />
     <Compile Include="NHibernateDomainRepository.cs" />
-    <Compile Include="NHibernateEventStorageBootstrapper.cs" />
+    <Compile Include="NHibernateAggregateStorageBootstrapper.cs" />
     <Compile Include="NHibernateAggregateStorageSessionBusModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaManager.cs" />

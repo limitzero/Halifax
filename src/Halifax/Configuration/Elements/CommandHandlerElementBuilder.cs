@@ -12,7 +12,7 @@ namespace Halifax.Configuration.Elements
     /// <command-handlers>
     ///    <add name="{full namespace of assembly for command handler}" />
     ///    ...
-    /// </messages>
+    /// </command-handlers>
     /// </summary>
     public class CommandHandlerElementBuilder : AbstractElementBuilder
     {

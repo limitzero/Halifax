@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Halifax.Eventing;
 using Halifax.Events;
+using Halifax.Internals.Serialization;
 using Halifax.NHibernate.EventStorage.Entities;
 using Halifax.Storage.Events;
-using Halifax.Storage.Internals.Serialization;
 using NHibernate.Criterion;
 
 namespace Halifax.NHibernate.EventStorage

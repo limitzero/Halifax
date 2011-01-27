@@ -13,40 +13,40 @@ namespace Halifax.Storage.Events
         /// <summary>
         /// (Read-Only). Identifier used by the persistant storage mechanism.
         /// </summary>
-        public int Id { get; private set; }
+        public virtual int Id { get; private set; }
 
         /// <summary>
         /// (Read-Write). The current identifier of the aggregate that 
         /// this event is mapped to.
         /// </summary>
-        public Guid EventSourceId { get; set; }
+        public virtual Guid EventSourceId { get; set; }
 
         /// <summary>
         /// (Read-Write). The current version of the aggregate that this 
         /// is mapped to.
         /// </summary>
-        public int Version { get; set; }
+        public virtual int Version { get; set; }
 
         /// <summary>
         /// (Read-Write). Timestamp for the current event.
         /// </summary>
-        public DateTime Timestamp { get; set; }
+        public virtual DateTime Timestamp { get; set; }
 
         /// <summary>
         /// (Read-Write). The serialized byte array of the event instance 
         /// used for storage.
         /// </summary>
-        public byte[] Data { get; set; }
+        public virtual byte[] Data { get; set; }
 
         /// <summary>
         /// (Read-Write). The current instance of the event used for simple
         /// in-memory querying.
         /// </summary>
-        public IDomainEvent Event { get; set; }
+        public virtual IDomainEvent Event { get; set; }
 
         /// <summary>
         /// (Read-Write). The name of the event that is persisted.
         /// </summary>
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
     }
 }

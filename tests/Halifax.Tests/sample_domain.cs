@@ -26,10 +26,16 @@ namespace Halifax.Tests
             this._repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, TestCommand command)
+        public override void Execute(IUnitOfWork session, TestCommand command)
         {
             var root = _repository.Find<TestEntity>(command.Id);
-            session.Accept(root);
+
+            using(ITransactedSession txn = session.BeginTransaction(root))
+            {
+                // call some methods on the aggregate...
+            }
+            
+            // session.Accept(root);
         }
     }
 

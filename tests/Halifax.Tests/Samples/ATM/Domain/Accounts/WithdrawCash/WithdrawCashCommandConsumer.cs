@@ -14,11 +14,14 @@ namespace Halifax.Tests.Samples.ATM.Domain.Accounts.WithdrawCash
             _repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, WithdrawCashCommand command)
+        public override void Execute(IUnitOfWork session, WithdrawCashCommand command)
         {
             var account = _repository.Find<Account>(command.Id);
-            account.WithdrawCash(command);
-            session.Accept(account);
+
+            using (ITransactedSession txn = session.BeginTransaction(account))
+            {
+                account.WithdrawCash(command);
+            }
         }
     }
 }

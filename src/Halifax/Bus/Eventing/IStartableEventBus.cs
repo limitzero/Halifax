@@ -1,6 +1,6 @@
 using System;
 using Halifax.Bus.Eventing;
-using Halifax.Storage.Internals;
+using Halifax.Internals;
 
 namespace Halifax.Bus.Eventing
 {

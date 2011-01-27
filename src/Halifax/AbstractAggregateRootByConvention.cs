@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Halifax.Exceptions;
@@ -7,7 +8,8 @@ namespace Halifax
 {
     /// <summary>
     /// Base class that represents an aggregate root where the events that  
-    /// are issued by the aggregate mapped by the convention "public void On{event name}(event)".
+    /// are issued by the aggregate mapped by the convention "private void On{event name}(event)"
+    /// or private {function name}(event)".
     /// </summary>
     [Serializable]
     public abstract class AbstractAggregateRootByConvention : AbstractAggregateRoot
@@ -35,18 +37,20 @@ namespace Halifax
             string pattern = "^(on|On|ON)" + domainEvent.Name;
             var regEx = new Regex(pattern);
 
-            foreach (MethodInfo item in GetType().GetMethods())
-            {
-                if (!regEx.IsMatch(item.Name)) continue;
-                method = item;
-                break;
-            }
+            method = (from theMethod in GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
+                      let parameters = theMethod.GetParameters()
+                      where (parameters.Length == 1
+                      && parameters[0].ParameterType == domainEvent)
+                      || regEx.IsMatch(theMethod.Name) == true
+                      select theMethod).FirstOrDefault();
 
-            //var method = (from m in this.GetType().GetMethods()
-            //              where m.Name.Trim() == string.Concat("On", domainEvent.Name)
-            //                    || m.Name == string.Concat("On", domainEvent.Name)
-            //                    || m.Name == string.Concat("ON", domainEvent.Name)
-            //              select m).FirstOrDefault();
+            // This works:
+            //foreach (MethodInfo item in GetType().GetMethods())
+            //{
+            //    if (!regEx.IsMatch(item.Name)) continue;
+            //    method = item;
+            //    break;
+            //}
 
             return method;
         }

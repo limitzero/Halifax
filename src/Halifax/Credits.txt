@@ -2,6 +2,15 @@
 
 The idea for this simple implementation came from the following sources with a little adaptation:
 
-Ncqrs Framework - The CQRS Framework for .NET — http://ncqrs.org 
 Mark Nihojf  - Fohjin Project ( https://github.com/MarkNijhof/Fohjin, blog: http://cre8ivethought.com/blog/index)
+Ncqrs Framework - The CQRS Framework for .NET — http://ncqrs.org 
+Udi Dahan
+Greg Young
 
+Features:
+- Command and Query Separation via defined interfaces on messages
+- Small bus structure to push messages out to an MSMQ for offline event synchronization (async and sync versions of event bus)
+- Central context object for working with layered implementations for processing the command objects
+- NHibernate used event and aggregate storage (can implement your own by deriving from interfaces IEventStorage and IDomainRepository)
+
+Still rough but does a lot, enjoy :)

@@ -8,10 +8,10 @@ using Halifax.Bus.Eventing;
 using Halifax.Commanding;
 using Halifax.Eventing;
 using Halifax.Exceptions;
+using Halifax.Internals.Dispatchers;
+using Halifax.Internals.Reflection;
 using Halifax.Storage.Aggregates;
 using Halifax.Storage.Events;
-using Halifax.Storage.Internals.Dispatchers;
-using Halifax.Storage.Internals.Reflection;
 
 namespace Halifax.Testing
 {
@@ -21,7 +21,8 @@ namespace Halifax.Testing
     /// <typeparam name="TAggregate">Type of the aggregate root to respond to the command</typeparam>
     /// <typeparam name="TCommand">Type of the command being issued to the aggregate root entity.</typeparam>
     /// <typeparam name="TCommandHandler">Type of the command handler used to process the command into the domain.</typeparam>
-    public abstract class BaseAggregateWithCommandConsumerTestFixture<TAggregate, TCommand, TCommandHandler>
+    public abstract class BaseAggregateWithCommandConsumerTestFixture<TAggregate, TCommand, TCommandHandler> : 
+        IDisposable
         where TAggregate : AbstractAggregateRoot, new()
         where TCommand : Command
         where TCommandHandler : CommandConsumer.For<TCommand>
@@ -51,12 +52,11 @@ namespace Halifax.Testing
 
         protected ThePublishedEvents PublishedEvents { get; private set; }
 
-        ~BaseAggregateWithCommandConsumerTestFixture()
+        public void Dispose()
         {
             if (_commandBus != null)
                 if (_commandBus.IsRunning)
                     _commandBus.Stop();
-
 
             if (_eventBus != null)
                 if (_eventBus.IsRunning)
@@ -199,8 +199,8 @@ namespace Halifax.Testing
             _container.Register(Component.For<IReflection>()
                                     .ImplementedBy<DefaultReflection>());
 
-            _container.Register(Component.For<IUnitOfWorkSession>()
-                                    .ImplementedBy<UnitOfWorkSession>());
+            _container.Register(Component.For<IUnitOfWork>()
+                                    .ImplementedBy<UnitOfWork>());
 
             _container.Register(Component.For<IStartableCommandBus>()
                                     .ImplementedBy<InProcessCommandBus>());

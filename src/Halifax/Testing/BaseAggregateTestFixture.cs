@@ -11,7 +11,7 @@ namespace Halifax.Testing
     /// Test fixture for testing the functionality of the entities that represent aggregate roots.
     /// </summary>
     /// <typeparam name="TAGGREGATE">The type of the object acting as the aggregate root</typeparam>
-    public abstract class BaseAggregateTestFixture<TAGGREGATE>
+    public abstract class BaseAggregateTestFixture<TAGGREGATE> : IDisposable
         where TAGGREGATE : AbstractAggregateRoot,  new()
     {
         private IWindsorContainer _container;
@@ -32,17 +32,19 @@ namespace Halifax.Testing
         /// </summary>
         protected ThePublishedEvents PublishedEvents { get; private set; }
 
-
         protected BaseAggregateTestFixture()
         {
             InitializeFixture();
             ExecuteContext();
         }
 
-        ~BaseAggregateTestFixture()
+        public void Dispose()
         {
             if (_container != null)
+            {
                 _container.Dispose();
+            }
+            _container = null;
         }
 
         /// <summary>

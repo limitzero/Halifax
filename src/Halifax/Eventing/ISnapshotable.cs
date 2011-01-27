@@ -1,5 +1,10 @@
 namespace Halifax.Eventing
 {
+    /// <summary>
+    /// Contract for all entities that can take a snapshot of the current series of events
+    /// that pertain to state changes to reduce the amount of information brough back 
+    /// when reconsituting the entity from historial data.
+    /// </summary>
     public interface ISnapshotable
     {
         /// <summary>
@@ -7,8 +12,9 @@ namespace Halifax.Eventing
         /// the number of 
         /// </summary>
         //Func<bool> IsSnapshotPeriodElapsed { get; set; }
+
         /// <summary>
-        /// (Read-Write).  The current count of events that will be recorded 
+        /// Gets or sets The current count of events that will be recorded 
         /// in the aggregate before submitting to the event store.
         /// </summary>
         int GetRecordedEventsCount();

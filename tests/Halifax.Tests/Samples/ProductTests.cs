@@ -167,7 +167,7 @@ namespace Halifax.Tests.Samples
             _repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, CreateProductCommand command)
+        public override void Execute(IUnitOfWork session, CreateProductCommand command)
         {
             var root = _repository.Create<Product>();
             root.CreateProduct(command);
@@ -186,14 +186,17 @@ namespace Halifax.Tests.Samples
             _repository = repository;
         }
 
-        public override void Execute(IUnitOfWorkSession session, ChangeProductPriceCommand command)
+        public override void Execute(IUnitOfWork session, ChangeProductPriceCommand command)
         {
             // can use ancillary services here to validate the product 
             // price via DI if needed:
 
             var root = _repository.Find<Product>(command.Id);
-            root.ChangePrice(command);
-            session.Accept(root);
+
+            using(ITransactedSession txn = session.BeginTransaction(root))
+            {
+                root.ChangePrice(command);
+            }
         }
     }
 

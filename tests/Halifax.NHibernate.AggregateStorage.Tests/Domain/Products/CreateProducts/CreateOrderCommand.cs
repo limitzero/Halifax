@@ -1,7 +1,7 @@
-using Axiom.Commanding;
 using System;
+using Halifax.Commanding;
 
-namespace Axiom.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts
+namespace Halifax.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts
 {
     [Serializable]
     public class CreateProductCommand : Command

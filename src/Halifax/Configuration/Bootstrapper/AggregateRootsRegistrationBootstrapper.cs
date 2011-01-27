@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Halifax.Storage.Internals.Reflection;
-using Halifax.Storage.Internals.Serialization;
+using Halifax.Internals.Reflection;
+using Halifax.Internals.Serialization;
 
 namespace Halifax.Configuration.Bootstrapper
 {

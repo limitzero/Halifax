@@ -5,7 +5,7 @@ using System.Reflection;
 using Castle.Core.Configuration;
 using Halifax.Commanding;
 using Halifax.Eventing;
-using Halifax.Storage.Internals.Serialization;
+using Halifax.Internals.Serialization;
 
 namespace Halifax.Configuration.Elements
 {

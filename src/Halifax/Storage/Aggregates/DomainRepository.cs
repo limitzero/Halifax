@@ -8,7 +8,8 @@ using Halifax.Storage.Events;
 namespace Halifax.Storage.Aggregates
 {
     /// <summary>
-    /// Repository charged with creating and finding aggregate roots of a particular type.
+    /// Repository charged with creating and finding aggregate roots of a particular type and 
+    /// reconsituting them from their associated events.
     /// </summary>
     public class DomainRepository : IDomainRepository
     {
@@ -22,8 +23,6 @@ namespace Halifax.Storage.Aggregates
             _kernel = kernel;
             _eventStorage = eventStorage;
         }
-
-        #region IDomainRepository Members
 
         public TEntity Create<TEntity>() where TEntity : AbstractAggregateRoot, new()
         {
@@ -58,6 +57,5 @@ namespace Halifax.Storage.Aggregates
             return entity;
         }
 
-        #endregion
     }
 }

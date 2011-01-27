@@ -1,45 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Axiom.Async.Pipeline.Module;
-using Axiom.Async.Transport;
-using Axiom.Commanding;
-using Axiom.Configuration;
-using Axiom.Configuration.Bootstrapper;
-using Axiom.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts;
 using Castle.MicroKernel;
-using Castle.Windsor;
-using Xunit;
-using Axiom.Storage.Aggregates;
-using Axiom.NHibernate.AggregateStorage.Tests.Domain.Products;
 using Castle.MicroKernel.Registration;
-using Axiom.Async.Endpoints.Module;
+using Castle.Windsor;
+using Halifax.Bus.Commanding;
+using Halifax.Commanding;
+using Halifax.Commanding.Module;
+using Halifax.Configuration;
+using Halifax.Configuration.Bootstrapper;
+using Halifax.NHibernate.AggregateStorage.Tests.Domain.Products;
+using Halifax.NHibernate.AggregateStorage.Tests.Domain.Products.CreateProducts;
+using Halifax.Storage.Aggregates;
+using Halifax.Storage.Events;
 using NHibernate;
-using Axiom.Commanding.Module;
-using Axiom.Storage.Events;
+using Xunit;
 
-namespace Axiom.NHibernate.AggregateStorage.Tests
+namespace Halifax.NHibernate.AggregateStorage.Tests
 {
-    public class NHibernateDomainRepositoryTests
+    public class NHibernateDomainRepositoryTests : IDisposable
     {
-        private readonly IWindsorContainer _container;
+        private Halifax.Configuration.Infrastructure.HalifaxContext _context;
+        private IWindsorContainer _container;
+
+        public static AbstractAggregateRoot _theAggregate; 
 
         public NHibernateDomainRepositoryTests()
         {
-            _container = new WindsorContainer(@"sample.config.xml");
-            _container.AddFacility(AxiomFacility.FACILITY_ID, new AxiomFacility());
+            _container = new WindsorContainer(@"halifax.config.xml");
+            _container.AddFacility(Halifax.Configuration.HalifaxFacility.FACILITY_ID, new HalifaxFacility());
+
             SchemaManager.CreateSchema();
         }
 
-        ~NHibernateDomainRepositoryTests()
+        public void Dispose()
         {
             _container.Dispose();
+            _container = null;
         }
 
-        [Fact]
-        public void can_save_domain_event_to_repository_and_have_event_recorded_as_such()
+        [Fact(Skip="The infrastructure should not stor aggregates, only the events of the aggregates...")]
+        public void can_create_aggreate_root_and_record_the_creation_event()
         {
+            IDomainRepository repository = _container.Resolve<IDomainRepository>();
+
+            Assert.IsType<NHibernateDomainRepository>(repository);
+
+            var product = repository.Create<Product>();
+            var id = product.Id;
+
             using(var bus = _container.Resolve<IStartableCommandBus>())
             {
                 bus.Start();
@@ -56,6 +64,35 @@ namespace Axiom.NHibernate.AggregateStorage.Tests
             Assert.NotNull(theEvent);
             Assert.Equal(typeof(ProductCreatedEvent), theEvent.GetType());
         }
+
+
+        public class MyCommand : Command
+        {}
+
+        public class MyCommandConsumer : 
+            CommandConsumer.For<MyCommand>
+        {
+            private readonly IDomainRepository _repository;
+
+            public MyCommandConsumer(IDomainRepository repository)
+            {
+                _repository = repository;
+            }
+
+            public override void Execute(IUnitOfWork session, MyCommand theCommand)
+            {
+                var aggregate = _repository.Create<MyAggregate>();
+                _theAggregate = aggregate;
+            }
+        }
+
+        public class MyAggregate : AbstractAggregateRootByConvention
+        {
+            public void DoSomething()
+            {
+            }
+        }
+
 
     }
 

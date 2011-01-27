@@ -8,10 +8,10 @@ using Halifax.Commanding;
 using Halifax.Eventing;
 using Halifax.Events;
 using Halifax.Exceptions;
+using Halifax.Internals.Dispatchers;
+using Halifax.Internals.Reflection;
+using Halifax.Internals.Serialization;
 using Halifax.Storage.Events;
-using Halifax.Storage.Internals.Dispatchers;
-using Halifax.Storage.Internals.Reflection;
-using Halifax.Storage.Internals.Serialization;
 
 namespace Halifax.Testing
 {
@@ -19,7 +19,7 @@ namespace Halifax.Testing
     /// Test fixture for invoking an event consumer or series of event consumers for a specific event message
     /// </summary>
     /// <typeparam name="TEvent">Current event to apply to the system to invoke the consumer(s)</typeparam>
-    public abstract class BaseEventConsumerTestFixture<TEvent>
+    public abstract class BaseEventConsumerTestFixture<TEvent> : IDisposable
         where TEvent : DomainEvent
     {
         private IStartableCommandBus _commandBus;
@@ -43,6 +43,20 @@ namespace Halifax.Testing
         /// out by the event bus.
         /// </summary>
         public ThePublishedEvents PublishedEvents { get; private set; }
+
+        public void Dispose()
+        {
+            if (_commandBus != null)
+                if (_commandBus.IsRunning)
+                    _commandBus.Stop();
+
+            if (_eventBus != null)
+                if (_eventBus.IsRunning)
+                    _eventBus.Stop();
+
+            if (_container != null)
+                _container.Dispose();
+        }
 
         /// <summary>
         /// This will set up the test fixture with the initial event consumers
@@ -200,8 +214,8 @@ namespace Halifax.Testing
             _container.Register(Component.For<ISerializationProvider>()
                                     .ImplementedBy<DataContractSerializationProvider>());
 
-            _container.Register(Component.For<IUnitOfWorkSession>()
-                                    .ImplementedBy<UnitOfWorkSession>());
+            _container.Register(Component.For<IUnitOfWork>()
+                                    .ImplementedBy<UnitOfWork>());
 
             _container.Register(Component.For<IReflection>()
                                     .ImplementedBy<DefaultReflection>());
@@ -236,18 +250,5 @@ namespace Halifax.Testing
             _eventBus.Start();
         }
 
-        ~BaseEventConsumerTestFixture()
-        {
-            if (_commandBus != null)
-                if (_commandBus.IsRunning)
-                    _commandBus.Stop();
-
-            if (_eventBus != null)
-                if (_eventBus.IsRunning)
-                    _eventBus.Stop();
-
-            if (_container != null)
-                _container.Dispose();
-        }
     }
 }
