@@ -1,27 +1,23 @@
-using Halifax.Commanding;
-using Halifax.Storage.Aggregates;
+using Halifax.Commands;
+using Halifax.Domain;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.RemoveItem
 {
     public class RemoveItemFromCartCommandConsumer : 
         CommandConsumer.For<RemoveItemFromCartCommand>
     {
-        private readonly IDomainRepository _repository;
+        private readonly IAggregateRootRepository repository;
 
-        public RemoveItemFromCartCommandConsumer(IDomainRepository repository)
+        public RemoveItemFromCartCommandConsumer(IAggregateRootRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
-        public override void Execute(IUnitOfWork session, RemoveItemFromCartCommand command)
+        public override AggregateRoot Execute(RemoveItemFromCartCommand command)
         {
-            var cart = _repository.Find<ShoppingCart>(command.CartId);
-
-            using (ITransactedSession txn = session.BeginTransaction(cart))
-            {
-                cart.RemoveItem(command.SKU);
-            }
-            
+            var cart = this.repository.Get<ShoppingCart>(command.CartId);
+             cart.RemoveItem(command.ItemId, command.Username, command.SKU);
+        	return cart;
         }
     }
 }

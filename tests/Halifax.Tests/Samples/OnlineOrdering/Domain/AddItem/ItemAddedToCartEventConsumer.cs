@@ -1,14 +1,28 @@
-﻿using Halifax.Eventing;
-using Halifax.Tests.Samples.OnlineOrdering.Domain.ReadModel;
+﻿using Halifax.Domain;
+using Halifax.Events;
+using Halifax.Read;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.AddItem
 {
     public class ItemAddedToCartEventConsumer :
-        EventConsumer.For<ItemAddedToCartEvent>
+        EventConsumer.For<ItemAddedToCart>
     {
-        public void Handle(ItemAddedToCartEvent theEvent)
+    	private readonly IReadModelRepository<ReadModel.ShoppingCartItem> repository;
+
+    	public ItemAddedToCartEventConsumer(IReadModelRepository<ReadModel.ShoppingCartItem> repository)
+    	{
+    		this.repository = repository;
+    	}
+
+    	public void Handle(ItemAddedToCart @event)
         {
-            ReadModelDB.CreateCartItem(theEvent.Username, theEvent.SKU, theEvent.Quantity);
+			this.repository.Insert(new ReadModel.ShoppingCartItem()
+			                       	{
+			                       		Id =  @event.ItemId,
+										ShoppingCartId = @event.EventSourceId, 
+										Quantity =  @event.Quantity, 
+										SKU =  @event.SKU
+			                       	});
         }
     }
 }

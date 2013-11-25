@@ -1,0 +1,38 @@
+﻿using Halifax.Configuration.Impl.Eventing;
+using Halifax.Configuration.Impl.Eventing.Impl;
+
+namespace Halifax.Configuration.Impl
+{
+	public class EventingConfigurator : IEventingConfigurator
+	{
+		private readonly IConfiguration configuration;
+
+		public EventingConfigurator(IConfiguration configuration)
+		{
+			this.configuration = configuration;
+		}
+
+		public IConfiguration Asynchronous()
+		{
+			this.configuration.Container
+				.CurrentContainer()
+				.Register<IEventBus, AsyncEventBus>();
+
+			return this.configuration;
+		}
+
+		public IConfiguration AsynchronousVia()
+		{
+			return this.configuration;
+		}
+
+		public IConfiguration Synchronous()
+		{
+			this.configuration.Container
+				.CurrentContainer()
+				.Register<IEventBus, InProcessEventBus>();
+
+			return this.configuration;
+		}
+	}
+}

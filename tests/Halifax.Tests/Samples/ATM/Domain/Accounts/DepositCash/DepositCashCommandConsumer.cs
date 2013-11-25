@@ -1,29 +1,23 @@
-using Halifax;
-using Halifax.Commanding;
-using Halifax.Storage.Aggregates;
-using Halifax.Tests.Samples.ATM.Domain.Accounts;
+using Halifax.Commands;
+using Halifax.Domain;
 
 namespace Halifax.Tests.Samples.ATM.Domain.Accounts.DepositCash
 {
-    public class DepositCashCommandConsumer : 
-        CommandConsumer.For<DepositCashCommand>
-    {
-        private readonly IDomainRepository _repository;
+	public class DepositCashCommandConsumer :
+		CommandConsumer.For<DepositCashCommand>
+	{
+		private readonly IAggregateRootRepository repository;
+		
+		public DepositCashCommandConsumer(IAggregateRootRepository repository)
+		{
+			this.repository = repository;
+		}
 
-        public DepositCashCommandConsumer(IDomainRepository repository)
-        {
-            _repository = repository;
-        }
-
-        public override void Execute(IUnitOfWork session, DepositCashCommand command)
-        {
-            var account = _repository.Find<Account>(command.Id);
-
-            using (ITransactedSession txn = session.BeginTransaction(account))
-            {
-                account.MakeCashDeposit(command);
-            }
-
-        }
-    }
+		public override AggregateRoot Execute(DepositCashCommand command)
+		{
+			var account = repository.Get<Account>(command.Id);
+			account.DepositCash(command.AccountNumber, command.DepositAmount);
+			return account;
+		}
+	}
 }

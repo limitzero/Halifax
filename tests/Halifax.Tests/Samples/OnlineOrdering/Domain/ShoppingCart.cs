@@ -1,77 +1,78 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Halifax.Domain;
 using Halifax.Tests.Samples.OnlineOrdering.Domain.AddItem;
 using Halifax.Tests.Samples.OnlineOrdering.Domain.CreateCart;
 using Halifax.Tests.Samples.OnlineOrdering.Domain.RemoveItem;
+using Halifax.Tests.Samples.OnlineOrdering.Domain.Services;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain
 {
-    public class ShoppingCart : AbstractAggregateRootByConvention
+	// pure behavioral model with no internal state...just logic (CQRS + ES)
+    public class ShoppingCart : AggregateRoot
     {
-        #region -- local state --
-        private string _username;
-        private DateTime _validUntil;
-        private readonly List<ShoppingCartItem> _items;
-        #endregion
+    	private readonly IItemsInCurrentCartService itemsInCurrentCartService;
 
-        public ShoppingCart()
+		// idea: if we use the domain service to check the duplicate rule, it will not be there as 
+		// the event may take some time in propogating to persistance store (be careful here):
+        public ShoppingCart(IItemsInCurrentCartService itemsInCurrentCartService)
         {
-            _items = new List<ShoppingCartItem>();
+        	this.itemsInCurrentCartService = itemsInCurrentCartService;
         }
 
-        public void Create(string username)
+    	public void Create(string username)
         {
-            var e = new CartCreatedEvent(username, System.DateTime.Now.AddMinutes(5));
-            ApplyEvent(e);
+        	var experation = System.DateTime.Now.AddMinutes(6);
+            var e = new CartCreatedEvent(username, experation);
+            Apply(e);
         }
 
         public void AddItem(string username, string sku, int quantity)
         {
-            var e = new ItemAddedToCartEvent(username, sku, quantity);
-            ApplyEvent(e);
+			GuardAgainstDuplicateItems(sku);
+
+			// rule: all child entities created inside the aggregate 
+			// must have the identity created within the aggregate
+			// that way the consistency of other entities that use the 
+			// identity value are in sync:
+        	var itemId = CombGuid.NewGuid();
+
+			var e = new ItemAddedToCart(itemId, username, sku, quantity);
+            Apply(e);
         }
 
-        public void RemoveItem(string sku)
+        public void RemoveItem(Guid itemId, string username, string sku)
         {
-            var e = new ItemRemovedFromCartEvent(_username, sku, DateTime.Now);
-            ApplyEvent(e);
+            var e = new ItemRemovedFromCart(itemId, username, sku);
+            Apply(e);
         }
 
         private void OnCartCreatedEvent(CartCreatedEvent @event)
         {
-            _username = @event.Username;
-            _validUntil = @event.ValidUntil;
         }
 
-        private void OnItemAddedToCartEvent(ItemAddedToCartEvent @event)
+        private void OnItemAddedToCartEvent(ItemAddedToCart @event)
         {
-            GuardAgainstDuplicateItems(@event.SKU);
-
-            var item = new ShoppingCartItem(@event.SKU, @event.Quantity);
-            _items.Add(item);
+            //var item = new ShoppingCartItem(@event.SKU, @event.Quantity);
+            //_items.Add(item);
         }
 
-        private void OnItemRemovedFromCartEvent(ItemRemovedFromCartEvent @event)
+        private void OnItemRemovedFromCartEvent(ItemRemovedFromCart @event)
         {
-            var toRemove = (from item in _items
-                            where item.SKU == @event.SKU
-                            select item).FirstOrDefault();
-
-            if (toRemove != null)
-            {
-                _items.Remove(toRemove);
-            }
+		
         }
 
         private void GuardAgainstDuplicateItems(string SKU)
         {
-            var item = (from itm in _items
-                        where itm.SKU == SKU
-                        select itm).FirstOrDefault();
+			// use cart service to guard on duplications (this is logic the aggregate root 
+			// cannot fulfill on its own...reach out and get some help with it):
+			bool isAlreadyInCart = 
+        	itemsInCurrentCartService.GetItemsForCurrentShoppingCart(this.Id)
+        		.Any(item => item.SKU.Equals(SKU));
 
-            if(item != null)
-                throw new ItemAlreadyPresentInCartException(SKU);
+			if(isAlreadyInCart == true)
+				throw new ItemAlreadyPresentInCartException(SKU);
         }
     }
 }

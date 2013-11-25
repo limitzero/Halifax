@@ -2,32 +2,31 @@
 using Halifax.Testing;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.DepositCash;
 using Halifax.Tests.Samples.ATM.ReadModel;
-using Xunit;
+using Machine.Specifications;
 
 namespace Halifax.Tests.Samples.ATM.Tests
 {
-    public class when_a_cash_deposit_is_made_on_the_account_and_request_is_made_to_view_the_balance
-        : BaseEventConsumerTestFixture<CashDepositedEvent>
-    {
-        private const decimal _depositAmount = 150.00M;
-        private Guid _accountId = Guid.NewGuid();
+	public class when_a_deposit_is_made_on_the_account_and_request_is_made_to_view_the_balance
+		: BaseEventConsumerTestFixture<CashDeposited>
+	{
+		private const decimal depositAmount = 150.00M;
+		private static readonly string accountNumber = Guid.NewGuid().ToString();
+		
+		public override CashDeposited When()
+		{
+			return new CashDeposited(accountNumber, depositAmount);
+		}
 
-        public override void Given()
-        {
-            ReadModelDB.Refresh();
-            RegisterEventConsumerOf<CashDepositedEventConsumer>();
-        }
+		It it_will_record_that_an_event_was_triggered_for_the_cash_being_deposited_to_the_account = () =>
+		{
+			PublishedEvents.Latest().WillBeOfType<CashDeposited>();
+		};
 
-        public override CashDepositedEvent When()
-        {
-            return new CashDepositedEvent(_accountId.ToString(), _depositAmount);
-        }
-
-        [Fact]
-        public void it_will_display_the_correct_balance_for_the_account_from_the_read_model()
-        {
-            PublishedEvents.Latest().WillBeOfType<CashDepositedEvent>();
-            Assert.Equal(_depositAmount, ReadModelDB.GetAccountBalance(_accountId).CurrentBalance);
-        }
-    }
+		It it_will_display_the_correct_balance_for_the_account = () =>
+		{
+			var query = new AccountBalanceQuery(accountNumber);
+			ExecuteQueryOverReadModel(query);
+			depositAmount.ShouldEqual(query.Result);
+		};
+	}
 }

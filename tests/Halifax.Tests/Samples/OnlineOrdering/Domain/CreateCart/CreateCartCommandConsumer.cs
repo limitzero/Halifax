@@ -1,27 +1,23 @@
-using Halifax.Commanding;
-using Halifax.Storage.Aggregates;
+using Halifax.Commands;
+using Halifax.Domain;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.CreateCart
 {
     public class CreateCartCommandConsumer 
         : CommandConsumer.For<CreateCartCommand>
     {
-        private readonly IDomainRepository _repository;
+        private readonly IAggregateRootRepository repository;
 
-        public CreateCartCommandConsumer(IDomainRepository repository)
+        public CreateCartCommandConsumer(IAggregateRootRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
-        public override void Execute(IUnitOfWork session,  CreateCartCommand command)
+        public override AggregateRoot Execute(CreateCartCommand command)
         {
-            var cart = _repository.Create<ShoppingCart>();
-
-            using (ITransactedSession txn = session.BeginTransaction(cart))
-            {
-                cart.Create(command.Username);
-            }
-            
+            var cart = repository.Get<ShoppingCart>(CombGuid.NewGuid());
+			cart.Create(command.Username);
+        	return cart;
         }
     }
 }

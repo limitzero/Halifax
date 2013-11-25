@@ -1,40 +1,41 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Windsor;
-using Halifax.Commanding;
-using Halifax.Eventing;
-using Halifax.Exceptions;
-using Halifax.Storage.Events;
+using Halifax.Commands;
+using Halifax.Configuration;
+using Halifax.Configuration.Impl.EventStorage;
+using Halifax.Events;
+using Halifax.Internals.Exceptions;
 
 namespace Halifax.Testing
 {
-    public class ThePublishedEvents : List<IDomainEvent>
+    public class ThePublishedEvents : List<Event>
     {
         private readonly Command _command;
-        private readonly IWindsorContainer _container;
-        private IDomainEvent _event;
+        private readonly IContainer _container;
+        private Event _event;
 
-        public ThePublishedEvents(IWindsorContainer container)
+        public ThePublishedEvents(IContainer container)
             : this(container, null)
         {
         }
 
-        public ThePublishedEvents(IWindsorContainer container, Command command)
+        public ThePublishedEvents(IContainer container, Command command)
         {
             _container = container;
             _command = command;
 
-            ICollection<IDomainEvent> history = _container.Resolve<IEventStorage>().GetCreationEvents();
+            ICollection<Event> history = _container.Resolve<IEventStorage>().GetCreationEvents();
 
             if (history.Count > 0)
             {
-                ICollection<IDomainEvent> events = _container.Resolve<IEventStorage>()
-                    .GetHistory(history.First().AggregateId);
-                AddRange(events);
+                ICollection<Event> events = _container.Resolve<IEventStorage>()
+                    .GetHistory(history.First().EventSourceId);
+                AddRange(events.Where( ev=> ev !=null).ToList());
             }
         }
 
-        public IDomainEvent Latest()
+        public Event Latest()
         {
             if (Count == 0)
                 if (_command != null)
@@ -48,9 +49,9 @@ namespace Halifax.Testing
             return _event;
         }
 
-        public TEvent Latest<TEvent>() where TEvent : class, IDomainEvent
+        public TEvent Latest<TEvent>() where TEvent : Event
         {
-            IDomainEvent domainEvent = this.Last();
+            Event domainEvent = this.Last();
             return domainEvent as TEvent;
         }
 

@@ -1,0 +1,24 @@
+﻿namespace Halifax.Configuration
+{
+	public interface IEventingConfigurator
+	{
+		/// <summary>
+		/// This will dispatch the events from the aggregate root out-of-process with the changes that are made.
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration Asynchronous();
+
+		/// <summary>
+		/// This will dispatch the events from the aggregate root out-process with the changes that are made
+		/// via an external component for dispatching events to components that will process those events.
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration AsynchronousVia();
+
+		/// <summary>
+		/// This will dispatch the events from the aggregate root in-process with the changes that are made.
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration Synchronous();
+	}
+}

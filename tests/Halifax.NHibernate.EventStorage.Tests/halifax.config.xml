@@ -9,23 +9,6 @@
         <add name="Halifax.NHibernate.EventStorage.Tests" />
       </messages>
       
-      <!--
-      <endpoints>
-        <add name="Axiom.Tests"
-                 uri="localhost@axiom.tests"
-                 concurrency="1"
-                 frequency="1"/>
-      </endpoints>
-
-      <command-handlers>
-        <add name="Halifax.NHibernate.EventStorage.Tests" />
-      </command-handlers>
-      
-      <event-handlers>
-        <add name="Axiom.Tests" />
-      </event-handlers>
-      -->
-
     </facility>
 
   </facilities>

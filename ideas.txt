@@ -1,0 +1,15 @@
+Q: What options to we have if an event causes an exception in the aggregate root upon loading the event data 
+due to a change in the business logic
+A: Need to have idea of submitting event "patches" that can de-activate an event from being selected
+on aggregate root hydration.
+
+- For the web with view models being presented to the page, how can we "project" our information 
+into the view models for consumption by the page?
+
+Integrating Backbone.CQRS into a solution with SignalR
+http://www.jayway.com/2012/03/09/using-backbone-cqrs-with-signalr/
+
+Implementation Questions:
+=========================
+1. Since all of the commands and aggregates are correlated by Guids, how does natural keys (i.e. business data identifiers such as 
+account numbers, invoice numbers, routing identifiers, etc) fit on aggregate retrieval and model persistance?

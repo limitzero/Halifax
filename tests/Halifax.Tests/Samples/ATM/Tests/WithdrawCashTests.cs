@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Halifax.Eventing;
+using Halifax.Events;
 using Halifax.Testing;
 using Halifax.Tests.Samples.ATM.Domain.Accounts;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.CreateAccount;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.DepositCash;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.Exceptions;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.WithdrawCash;
-using Xunit;
+using Machine.Specifications;
 
 namespace Halifax.Tests.Samples.ATM.Tests
 {
@@ -15,34 +15,31 @@ namespace Halifax.Tests.Samples.ATM.Tests
     /// has enough funds availaible to process the transaction, then debit the account by 
     /// the withdrawal amount and allocate the cash to the customer.
     /// </summary>
-    public class when_withdrawing_cash_from_the_atm_and_the_account_has_the_available_funds : 
-        BaseAggregateWithCommandConsumerTestFixture<Account, 
-            WithdrawCashCommand, 
-            WithdrawCashCommandConsumer>
+    public class when_withdrawing_cash_from_the_atm_and_the_account_has_the_available_funds :
+		BaseAggregateRootTestFixture<Account, WithdrawCashCommand>
     {
         private const string _teller = "Chuck Knorris";
-        private readonly string _accountNumber = "1234567890";
-        private const decimal _avaliableFunds = 150.00M;
-        private const decimal _withdrawalAmount = 50.00M;
+        private readonly string accountNumber = "1234567890";
+        private const decimal avaliableFunds = 150.00M;
+        private const decimal withdrawalAmount = 50.00M;
 
-        public override IEnumerable<IDomainEvent> Given()
+        public override IEnumerable<Event> Given()
         {
             // create the account and seed it with some money:
-            yield return new AccountCreatedEvent(_teller,"Joe", "Smith");
-            yield return new CashDepositedEvent(_accountNumber, _avaliableFunds);
+            yield return new AccountCreated("Joe", "Smith", 0.0M);
+            yield return new CashDeposited(accountNumber, avaliableFunds);
         }
 
-        public override WithdrawCashCommand When()
+		public override WithdrawCashCommand When()
         {
             // withdraw the cash from the account
-            return new WithdrawCashCommand(Aggregate.Id, _accountNumber,_withdrawalAmount);
+            return new WithdrawCashCommand(AggregateRoot.Id, accountNumber,withdrawalAmount);
         }
 
-        [Fact]
-        public void it_will_publish_an_event_noting_that_the_cash_has_been_withdrawn()
-        {
-            PublishedEvents.Latest().WillBeOfType<CashWithdrawnEvent>();
-        }
+		It it_will_publish_an_event_noting_that_the_cash_has_been_withdrawn = () =>
+		{
+			PublishedEvents.Latest().WillBeOfType<CashWithdrawn>();
+		};
 
     }
 
@@ -52,41 +49,37 @@ namespace Halifax.Tests.Samples.ATM.Tests
     /// completed on the account for the indicated amount. 
     /// </summary>
     public class when_withdrawing_cash_from_the_atm_and_the_amount_exceeds_the_available_funds
-        : BaseAggregateWithCommandConsumerTestFixture<Account, 
-              WithdrawCashCommand, 
-              WithdrawCashCommandConsumer>
+		: BaseAggregateRootTestFixture<Account, WithdrawCashCommand>
     {
-        private readonly string _accountNumber = string.Empty;
-        private const decimal _avaliableFunds = 150.00M;
-        private const decimal _withdrawalAmount = 200.00M;
+        private readonly string accountNumber = string.Empty;
+        private const decimal avaliableFunds = 150.00M;
+        private const decimal withdrawalAmount = 200.00M;
 
         public when_withdrawing_cash_from_the_atm_and_the_amount_exceeds_the_available_funds()
         {
-            _accountNumber = "1234567890";
+            accountNumber = "1234567890";
         }
 
-        public override IEnumerable<IDomainEvent> Given()
+        public override IEnumerable<Event> Given()
         {
             // create the account and seed it with some money:
-            yield return new AccountCreatedEvent(_accountNumber, "Joe", "Smith");
-            yield return new CashDepositedEvent(_accountNumber, _avaliableFunds);
+            yield return new AccountCreated("Joe", "Smith", decimal.Zero);
+            yield return new CashDeposited(accountNumber, avaliableFunds);
         }
 
-        public override WithdrawCashCommand When()
+		public override WithdrawCashCommand When()
         {
-            return new WithdrawCashCommand(Aggregate.Id, _accountNumber, _withdrawalAmount);
+            return new WithdrawCashCommand(AggregateRoot.Id, accountNumber, withdrawalAmount);
         }
 
-        [Fact]
-        public void it_will_not_publish_an_event_noting_that_the_cash_has_been_withdrawn()
-        {
-            PublishedEvents.Latest().WillNotBeOfType<CashWithdrawnEvent>();
-        }
+		It it_will_not_publish_an_event_noting_that_the_cash_has_been_withdrawn = () =>
+		{
+			PublishedEvents.Latest().WillNotBeOfType<CashWithdrawn>();
+		};
 
-        [Fact]
-        public void it_will_return_a_message_indicating_the_amount_exceeds_the_available_funds()
-        {
-            CaughtException.WillBeOfType<WithdrawalAmountExceedsAvaliableFundsException>();
-        }
+		It it_will_return_a_message_indicating_the_amount_exceeds_the_available_funds = () =>
+		{
+			CaughtException.WillBeOfType<WithdrawalAmountExceedsAvaliableFundsException>();
+		};
     }
 }

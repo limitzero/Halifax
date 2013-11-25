@@ -1,0 +1,47 @@
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using Halifax.Exceptions;
+
+namespace Halifax.Domain
+{
+    /// <summary>
+    /// Base class that represents an aggregate root where the events that  
+    /// are issued by the aggregate mapped by the convention "private void On{event name}(event)"
+    /// or private {function name}(event)".
+    /// </summary>
+    [Serializable]
+    public abstract class AbstractAggregateRootByConvention : AbstractAggregateRoot
+    {
+        public override void Apply<TEvent>(TEvent currentEvent, bool isLoadingFromHistory)
+        {
+            MethodInfo handler = GetMethodForEvent(currentEvent.GetType());
+
+            if (handler == null)
+                throw new UnregisteredEventHandlerOnAggregateForEventException(GetType(), currentEvent.GetType());
+
+            handler.Invoke(this, new object[] {currentEvent});
+
+            if (isLoadingFromHistory == false)
+            {
+                // update the current event with the information from the aggregate:
+                GetVersion();
+                PrepareDomainEvent(currentEvent);
+                Record(currentEvent);
+            }
+        }
+
+        private MethodInfo GetMethodForEvent(Type @event)
+        {
+            MethodInfo method = null;
+
+			 method = this.GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
+				.Where(m => m.GetParameters().
+								Where(p => p.ParameterType == @event.GetType()).FirstOrDefault() != null)
+				.Select(m => m).FirstOrDefault();
+
+            return method;
+        }
+    }
+}

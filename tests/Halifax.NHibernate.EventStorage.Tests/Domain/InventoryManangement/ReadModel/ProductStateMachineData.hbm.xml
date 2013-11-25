@@ -1,0 +1,21 @@
+﻿<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Halifax.NHibernate.Tests"
+                   namespace="Halifax.NHibernate.Tests.Domain.InventoryManangement.ReadModel"
+                   default-lazy="false">
+
+	<!-- entity: ProductStateMachineData -->
+	<class name="ProductStateMachineData" table="ProductStateMachineData">
+
+		<id name="Id" column="Id" type="System.Guid" >
+			<generator class="assigned" />
+		</id>
+
+		<!-- properties for entity 'ProductStateMachineData' -->
+		<property name="State" column="state" type="String" length="255"  />
+		<property name="Name" column="product_name" type="String" length="255"  />
+		<property name="Occurrences" column="occurrences" type="System.Int32"  />
+
+	</class>
+
+</hibernate-mapping>
+

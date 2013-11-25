@@ -1,27 +1,23 @@
-using Halifax.Commanding;
-using Halifax.Storage.Aggregates;
+using Halifax.Commands;
+using Halifax.Domain;
 
 namespace Halifax.Tests.Samples.ATM.Domain.Accounts.CreateAccount
 {
     public class CreateAccountCommandConsumer
         : CommandConsumer.For<CreateAccountCommand>
     {
-        private readonly IDomainRepository _repository;
+		private readonly IAggregateRootRepository repository;
 
-        public CreateAccountCommandConsumer(IDomainRepository repository)
+        public CreateAccountCommandConsumer(IAggregateRootRepository repository)
         {
-            _repository = repository;
+			this.repository = repository;
         }
 
-        public override void Execute(IUnitOfWork session, CreateAccountCommand command)
+        public override AggregateRoot Execute(CreateAccountCommand command)
         {
-            var account = _repository.Create<Account>();
-
-            using (ITransactedSession txn = session.BeginTransaction(account))
-            {
-                account.Create(command);
-            }
-           
+			var account = repository.Get<Account>(command.Id);
+			account.Create(command.FirstName, command.LastName, command.InitialAmount);
+        	return account;
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿using Halifax.Configuration.Impl.Serialization;
+using Halifax.Configuration.Impl.Serialization.Impl;
+
+namespace Halifax.Configuration.Impl
+{
+	public class SerializationConfigurator : ISerializationConfigurator
+	{
+		private readonly IConfiguration configuration;
+
+		public SerializationConfigurator(IConfiguration configuration)
+		{
+			this.configuration = configuration;
+		}
+
+		public IConfiguration UsingJSON()
+		{
+			var serializer = new JSONSerializationProvider();
+
+			this.configuration.Container.CurrentContainer()
+				.RegisterInstance<ISerializationProvider, JSONSerializationProvider>(serializer);
+
+			return this.configuration;
+		}
+
+		public IConfiguration UsingSharpSerializer()
+		{
+			var serializer = new SharpSerializerSerializationProvider();
+
+			this.configuration.Container.CurrentContainer()
+				.RegisterInstance<ISerializationProvider, SharpSerializerSerializationProvider>(serializer);
+
+			return this.configuration;
+		}
+
+		public IConfiguration UsingNetDataContract()
+		{
+			var serializer = new DataContractSerializationProvider();
+
+			this.configuration.Container.CurrentContainer()
+				.RegisterInstance<ISerializationProvider, DataContractSerializationProvider>(serializer);
+
+			return this.configuration;
+		}
+	}
+}

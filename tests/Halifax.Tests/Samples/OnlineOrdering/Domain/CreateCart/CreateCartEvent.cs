@@ -1,10 +1,10 @@
 ﻿using System;
-using Halifax.Eventing;
+using Halifax.Events;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.CreateCart
 {
     [Serializable]
-    public class CartCreatedEvent : DomainEvent
+    public class CartCreatedEvent : Event
     {
         public string Username { get; set; }
         public DateTime ValidUntil { get; set; }

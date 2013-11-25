@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("Halifax")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A sample framework for CQRS")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CarbonWorks")]
 [assembly: AssemblyProduct("Halifax")]

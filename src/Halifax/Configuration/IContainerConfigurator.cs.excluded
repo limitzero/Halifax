@@ -1,0 +1,8 @@
+﻿namespace Halifax.Configuration
+{
+	public interface IContainerConfigurator
+	{
+		IConfiguration UsingCastleWindsor();
+		IContainer CurrentContainer();
+	}
+}

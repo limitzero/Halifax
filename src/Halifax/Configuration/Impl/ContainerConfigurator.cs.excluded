@@ -1,0 +1,27 @@
+﻿using Halifax.Configuration.Impl.Containers;
+using Halifax.Configuration.Impl.Containers.Impl;
+
+namespace Halifax.Configuration.Impl
+{
+	public class ContainerConfigurator : IContainerConfigurator
+	{
+		private readonly IConfiguration configuration;
+		private IContainer container; 
+
+		public ContainerConfigurator(IConfiguration configuration)
+		{
+			this.configuration = configuration;
+		}
+
+		public IConfiguration UsingCastleWindsor()
+		{
+			this.container = new CastleWindsorContainer();
+			return this.configuration;
+		}
+
+		public IContainer CurrentContainer()
+		{
+			return this.container;
+		}
+	}
+}

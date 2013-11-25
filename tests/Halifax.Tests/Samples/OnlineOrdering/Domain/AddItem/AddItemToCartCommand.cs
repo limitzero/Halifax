@@ -1,5 +1,5 @@
 ﻿using System;
-using Halifax.Commanding;
+using Halifax.Commands;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.AddItem
 {
@@ -7,6 +7,7 @@ namespace Halifax.Tests.Samples.OnlineOrdering.Domain.AddItem
     public class AddItemToCartCommand : Command
     {
         public Guid CartId { get; set; }
+		public Guid ItemId { get; set; }
         public string Username { get; set; }
         public string SKU { get; set; }
         public int Quantity { get; set; }

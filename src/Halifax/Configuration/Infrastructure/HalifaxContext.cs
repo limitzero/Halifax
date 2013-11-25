@@ -15,7 +15,7 @@ namespace Halifax.Configuration.Infrastructure
     {
         private const string _default_configuration_file = @"halifax.config.xml";
         private readonly string _configurationFile;
-        private IStartableCommandBus _commadBus;
+        private IStartableCommandBus _commandBus;
         private IWindsorContainer _container;
         private IStartableEventBus _eventBus;
 
@@ -50,8 +50,8 @@ namespace Halifax.Configuration.Infrastructure
 
         public void Dispose()
         {
-            if (_commadBus.IsRunning)
-                _commadBus.Stop();
+            if (_commandBus.IsRunning)
+                _commandBus.Stop();
 
             if (_eventBus.IsRunning)
                 _eventBus.Stop();
@@ -93,10 +93,10 @@ namespace Halifax.Configuration.Infrastructure
             }
 
             _container.AddFacility(HalifaxFacility.FACILITY_ID, new HalifaxFacility());
-            _commadBus = _container.Resolve<IStartableCommandBus>();
+            _commandBus = _container.Resolve<IStartableCommandBus>();
             _eventBus = _container.Resolve<IStartableEventBus>();
 
-            _commadBus.Start();
+            _commandBus.Start();
             _eventBus.Start();
         }
 
@@ -112,13 +112,49 @@ namespace Halifax.Configuration.Infrastructure
                 throw new Exception(
                     "Before sending the command, make sure to invoke the BootStrap() or BootStrapFrom(...) methods to initialize the communcation context.");
 
-            if (!_commadBus.IsRunning)
+            if (_commandBus.IsRunning  == false)
                 throw new Exception("The current environment has not been started for sending commands.");
 
-            if (!_eventBus.IsRunning)
+            if (_eventBus.IsRunning == false)
                 throw new Exception("The current environment has not been started for publishing events.");
 
-            _commadBus.Send(command);
+            _commandBus.Send(command);
         }
+
+		/// <summary>
+		/// This will send the command to the domain via the command 
+		/// consumers and forward any triggered events to their 
+		/// corresponding event consumers. This implements the BeginXXX and 
+		/// EndXXX pattern for async events.
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="callback"></param>
+		/// <returns></returns>
+		public IAsyncResult SendAsync(Command command, AsyncCallback callback = null)
+		{
+			Action sendCommand = () => this.Send(command);
+			IAsyncResult asyncResult = sendCommand.BeginInvoke(callback, null);
+			return asyncResult;
+		}
+
+    	/// <summary>
+		/// This will find a component in the underlying container.
+		/// </summary>
+		/// <typeparam name="TComponent"></typeparam>
+		/// <returns></returns>
+		public TComponent Resolve<TComponent>()
+		{
+			return _container.Resolve<TComponent>();
+		}
+
+		private void SendCommandAsync(object state)
+		{
+			Command command = state as Command;
+
+			if(command != null)
+			{
+				this.Send(command);
+			}
+		}
     }
 }

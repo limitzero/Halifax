@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using Halifax.Eventing;
+using Halifax.Events;
 using Halifax.Testing;
-using Halifax.Tests.Samples.ATM.Domain.Accounts;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.CreateAccount;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.DepositCash;
-using Halifax.Tests.Samples.ATM.ReadModel;
-using Xunit;
+using Machine.Specifications;
 
 namespace Halifax.Tests.Samples.ATM.Tests
 {
@@ -15,45 +13,34 @@ namespace Halifax.Tests.Samples.ATM.Tests
     /// and update the balance.
     /// </summary>
     public class when_making_a_cash_deposit_into_the_account_from_the_atm :
-        BaseAggregateWithCommandConsumerTestFixture<Account, 
-            DepositCashCommand, 
-            DepositCashCommandConsumer>
+		BaseAggregateRootTestFixture<ATM.Domain.Accounts.Account, DepositCashCommand>
     {
-        private const string _teller = "Chuck Knorris";
-        private readonly string _accountNumber = "1234567890";
-        private const decimal _avaliableFunds = 150.00M;
-        private const decimal _depositAmount = 50.00M;
+        private readonly string accountNumber = "1234567890";
+        private const decimal avaliableFunds = 150.00M;
+        private const decimal depositAmount = 50.00M;
 
-        public override void Initially()
-        {
-            ReadModelDB.Refresh();
-            RegisterCollaborator<CashDepositedEventConsumer>(); 
-        }
-
-        public override IEnumerable<IDomainEvent> Given()
+        public override IEnumerable<Event> Given()
         {
             // create the account and seed it with some money:
-            yield return new AccountCreatedEvent(_teller, "Joe", "Smith");
-            yield return new CashDepositedEvent(_accountNumber, _avaliableFunds);
+            yield return new AccountCreated("Joe", "Smith",decimal.Zero);
+            yield return new CashDeposited(accountNumber, avaliableFunds);
         }
 
-        public override DepositCashCommand When()
+		public override DepositCashCommand When()
         {
             // deposit the cash into the account:
-            return new DepositCashCommand(Aggregate.Id, _depositAmount);
+            return new DepositCashCommand(AggregateRoot.Id, depositAmount);
         }
 
-        [Fact]
-        public void it_will_publish_an_event_noting_that_the_cash_has_been_deposited()
-        {
-            PublishedEvents.Latest().WillBeOfType<CashDepositedEvent>();
-        }
+		It it_will_publish_an_event_noting_that_the_cash_has_been_deposited = () =>
+		{
+			PublishedEvents.Latest().WillBeOfType<CashDeposited>();
+		};
 
-        [Fact]
-        public void it_will_record_the_correct_amount_that_is_made_toward_the_deposit()
-        {
-            PublishedEvents.Latest<CashDepositedEvent>().DepositAmount.WillBe(_depositAmount);
-        }
+		It it_will_record_the_correct_amount_that_is_made_toward_the_deposit = () =>
+		{
+			PublishedEvents.Latest<CashDeposited>().DepositAmount.WillBe(depositAmount);
+		};
 
     }
 }

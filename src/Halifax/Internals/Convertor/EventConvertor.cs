@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Halifax.Eventing;
+using Halifax.Events;
 
 namespace Halifax.Internals.Convertor
 {
     public class EventConvertor : IEventConvertor
     {
-        public IDomainEvent NewEvent { get; private set; }
+        public Event NewEvent { get; private set; }
 
-        public IDomainEvent OldEvent { get; private set; }
+        public Event OldEvent { get; private set; }
 
-        public IDomainEvent Convert(IDomainEvent @event)
+        public Event Convert(Event @event)
         {
             var newEvent = this.MapProperties(@event);
             return newEvent;
         }
 
         public void RegisterConversion<TNEWEVENT, TOLDEVENT>()
-            where TOLDEVENT : class, IDomainEvent, new()
+            where TOLDEVENT : Event, new()
             where TNEWEVENT : class, TOLDEVENT, new()
         {
             this.OldEvent = new TOLDEVENT();
             this.NewEvent = new TNEWEVENT();
         }
 
-        private ICollection<PropertyInfo> GetLocalProperties(IDomainEvent @event)
+        private ICollection<PropertyInfo> GetLocalProperties(Event @event)
         {
             var properties =
                 (from property in @event.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
@@ -34,9 +34,9 @@ namespace Halifax.Internals.Convertor
             return properties;
         }
 
-        private IDomainEvent MapProperties(IDomainEvent @event)
+        private Event MapProperties(Event @event)
         {
-            var newEvent = Activator.CreateInstance(this.NewEvent.GetType()) as IDomainEvent;
+            var newEvent = Activator.CreateInstance(this.NewEvent.GetType()) as Event;
 
             foreach (var property in GetLocalProperties(@event))
             {
@@ -48,7 +48,7 @@ namespace Halifax.Internals.Convertor
                         theProperty.SetValue(newEvent, property.GetValue(@event, null), null);
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                     continue;
                 }

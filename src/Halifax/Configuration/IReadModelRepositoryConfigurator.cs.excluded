@@ -1,0 +1,28 @@
+using System;
+using Halifax.Configuration.Impl.Extensibility.NHibernate;
+
+namespace Halifax.Configuration
+{
+	public interface IReadModelRepositoryConfigurator
+	{
+		/// <summary>
+		/// Use the in-memory (volatile) storage and persistance for read model data projected from the aggregate root behavioral modelvia events
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration UsingInMemoryRepository();
+
+		/// <summary>
+		/// Use NHibernate storage and persistance for read model data projected from the aggregate root behavioral model via events
+		/// (each read model projection or class must have the appropriate mapping file per normal operations for NHibernate)
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration UsingNHibernate(Func<NHibernateConfiguration, NHibernateConfiguration> read_model_configuration);
+
+		/// <summary>
+		/// This will tell the configuration that while storing and retrieving read model data to the persistance store, a custom implemenation 
+		/// will be in use that is outside of the normal read model configuration options.
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration UsingCustomPersistance();
+	}
+}

@@ -1,97 +1,50 @@
 using System;
+using Halifax.Domain;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.CreateAccount;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.DepositCash;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.Exceptions;
 using Halifax.Tests.Samples.ATM.Domain.Accounts.WithdrawCash;
+using Halifax.Tests.Samples.ATM.Services;
 
 namespace Halifax.Tests.Samples.ATM.Domain.Accounts
 {
-    public class Account : AbstractAggregateRootByConvention
-        //: AbstractAggregateRoot
+    public class Account : AggregateRoot
     {
-        private string _accountNumber;
-        private string _firstname;
-        private string _lastname;
-        private decimal _balance;
-        private string _teller;
+    	private readonly IOverdraftInspectionService overdraftInspectionService;
 
-        public override void RegisterEvents()
+    	public Account(IOverdraftInspectionService overdraftInspectionService)
+    	{
+    		this.overdraftInspectionService = overdraftInspectionService;
+    	}
+
+    	public void Create(string firstName, string lastName, decimal  initialAmount)
         {
-            // use the events by convention on the aggregate:
-            //RegisterEvent<AccountCreatedEvent>(OnAccountCreatedEvent);
-            //RegisterEvent<CashDepositedEvent>(OnCashDepositedEvent);
-            //RegisterEvent<CashWithdrawnEvent>(OnCashWithdrawnEvent);
+			// UC1: create the account and assign a business specific account number for compliance purposes.
+        	var accountNumber = CombGuid.NewGuid().ToString();
+			var ev = new AccountCreated(firstName, lastName, initialAmount) { AccountNumber = accountNumber };
+            Apply(ev);
         }
 
-        public void Create(CreateAccountCommand command)
+        public void DepositCash(string accountNumber, decimal  depositAmount)
         {
-            var ev = new AccountCreatedEvent(command.Teller, command.FirstName, 
-                command.LastName, command.InitialAmount);
-            ApplyEvent(ev);
+			var ev = new CashDeposited(accountNumber, depositAmount);
+            Apply(ev);
         }
 
-        public void MakeCashDeposit(DepositCashCommand command)
+        public void WithdrawCash(string accountNumber, decimal  withdrawalAmount)
         {
-            var ev = new CashDepositedEvent(this._accountNumber, command.DepositAmount);
-            ApplyEvent(ev);
+            InspectBalanceAgainstWithdrawalAmount(accountNumber, withdrawalAmount);
+			var ev = new CashWithdrawn(accountNumber, withdrawalAmount);
+            Apply(ev);
         }
 
-        public void WithdrawCash(WithdrawCashCommand command)
-        {
-            InspectBalance(command);
-
-            var ev = new CashWithdrawnEvent(command.AccountNumber, command.WithdrawalAmount);
-            ApplyEvent(ev);
-        }
-
-        private void InspectBalance(WithdrawCashCommand command)
+		private void InspectBalanceAgainstWithdrawalAmount(string accountNumber, decimal withdrawalAmount)
         {
             // UC2: when the withdrawal amount exceeds the current balance
             // generate an exception indicating as such to the customer:
-            if (command.WithdrawalAmount > _balance)
-                throw new WithdrawalAmountExceedsAvaliableFundsException(command.WithdrawalAmount, _balance);
+			decimal balance = decimal.Zero;
+			if (this.overdraftInspectionService.IsOverdrawn(accountNumber, withdrawalAmount, out balance))
+				throw new WithdrawalAmountExceedsAvaliableFundsException(withdrawalAmount, balance);
         }
-
-        private void OnAccountCreatedEvent(AccountCreatedEvent domainEvent)
-        {
-            // UC1: create the account and assign a business specific 
-            // account number for compliance purposes.
-            _accountNumber = Guid.NewGuid().ToString(); 
-            _firstname = domainEvent.FirstName;
-            _lastname = domainEvent.LastName;
-            _teller = domainEvent.Teller;
-            _balance = domainEvent.InitialAmount;
-        }
-
-        private void OnCashDepositedEvent(CashDepositedEvent domainEvent)
-        {
-            _balance += domainEvent.DepositAmount;
-        }
-
-        private void OnCashWithdrawnEvent(CashWithdrawnEvent domainEvent)
-        {            
-            _balance -= domainEvent.WithdrawalAmount;
-        }
-
-        /// <summary>
-        /// Used only for testing in the absence of a read-model.
-        /// </summary>
-        /// <returns></returns>
-        public decimal GetCurrentBalance()
-        {
-            return _balance;
-        }
-
-        /// <summary>
-        /// Used only for testing in the absence of a read-model.
-        /// </summary>
-        /// <returns></returns>
-        public string GetAccountNumber()
-        {
-            return _accountNumber;
-        }
-
-
-
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using Halifax.Commanding;
+using Halifax.Commands;
 
 namespace Halifax.Tests.Samples.OnlineOrdering.Domain.CreateCart
 {

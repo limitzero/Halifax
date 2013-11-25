@@ -1,0 +1,80 @@
+﻿ - Need a way to make the system externally configurable 
+ -> Can create role interfaces for the boot system to pick up at initialization
+
+ ISubscribeToEvents - maker interface for components that can take the events from the 
+ aggregate root and process them to an external on internal source
+
+ IQueryOn, IQueryOn<> - marker interface for a component that can project information from the persistance model 
+ to the user as a result of stored event information
+
+ IEventStore - marker interface for the storage of events that are produced from the aggregate root
+
+ IRepositoryFor, IRepositoryFor<> - marker interface for retrieving all event information pertaining to a particular 
+ aggregate root for hydration into the aggregate root to restore state. 
+
+ IAggregateRoot - marker interface for the consitency unit of data and transactional boundary for related entities
+ (i.e. central point of domain changes to root and supporting entities)
+
+ ICommandHandler, ICommandHandler<> - marker interface for components that can handle commands that are 
+ meant to change the state of an aggregate root
+
+ Internals:
+ ==========================================
+ ICommandBus - In process component to "Send" a command to the aggregate root by way of the appropriate command handler
+
+
+ Ex: Scenario of taking the command through the architecture
+
+ 1. The command is issued to the command bus for dispatching to the appropriate handler
+ 2. 
+
+ Querying the read model for data:
+
+ I want it to go something along the lines of this:
+
+ public class Employee : IReadModel
+ {}
+
+ public class AllEmployees : Query<IEnumerable<Employee>>
+ {	
+	IReadModelRepository<Employee> repository
+
+	public IEnumerable<Employee> Result {get; set;}
+
+	public class AllEmployees(IReadModelRepository<Employee> repository)
+	{
+		this.repository = repository;
+	}
+
+	public override void Execute()
+	{
+		this.Result =  repository.Query().All();	
+	}
+ }
+
+ public class AllTransactionsForAccount : Query<IEnumerable<AccountTransaction>>
+ {
+	private string account_number = string.empty;
+
+	public IEnumerable<IAccountTransaction> Result {get;set;}
+
+	public AllTransactionsForAccount(string account_number)
+	{
+		this.account_number = account_number;
+	}
+	
+	public bool void IsMetBy(AccountTransaction transaction)
+	{
+		return transaction.AccountNumber.Equal(this.account_number);
+	}	
+
+ }
+
+
+ public class InMemoryReadModelRepository<AccountTransaction>
+ {
+	public IEnumerable<AccountTransaction> Query(IQueryOn query)
+	{
+		return query.Execute(
+	}
+ }

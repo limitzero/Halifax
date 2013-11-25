@@ -1,50 +1,44 @@
 using System;
-using Halifax.Commanding;
-using Halifax.Storage.Aggregates;
-using Halifax.Eventing;
+using Halifax.Commands;
+using Halifax.Domain;
+using Halifax.Events;
 
 namespace Halifax.Tests
 {
-    public class TestEntity : AbstractAggregateRootByConvention
-    { }
+	public class TestEntity : AggregateRoot
+	{ }
 
-    public class TestCommand : Command
-    {
-        public Guid Id { get; set; }
-    }
+	public class TestCommand : Command
+	{
+		public Guid Id { get; set; }
+	}
 
-    public class TestEvent : DomainEvent
-    {}
+	public class TestEvent : Event
+	{ }
 
-    public class TestCommandConsumer :
-        CommandConsumer.For<TestCommand>
-    {
-        private readonly IDomainRepository _repository;
+	public class TestCommandConsumer :
+		CommandConsumer.For<TestCommand>
+	{
+		private readonly IAggregateRootRepository root_repository;
 
-        public TestCommandConsumer(IDomainRepository repository)
-        {
-            this._repository = repository;
-        }
+		public TestCommandConsumer(IAggregateRootRepository rootRepository)
+		{
+			this.root_repository = rootRepository;
+		}
 
-        public override void Execute(IUnitOfWork session, TestCommand command)
-        {
-            var root = _repository.Find<TestEntity>(command.Id);
+		public override AggregateRoot Execute(TestCommand command)
+		{
+			var root = root_repository.Get<TestEntity>(command.Id);
+			return root;
+		}
+	}
 
-            using(ITransactedSession txn = session.BeginTransaction(root))
-            {
-                // call some methods on the aggregate...
-            }
-            
-            // session.Accept(root);
-        }
-    }
+	public class TestEventConsumer :
+		EventConsumer.For<TestEvent>
+	{
+		public void Handle(TestEvent @event)
+		{
 
-    public class TestEventConsumer : 
-        EventConsumer.For<TestEvent>
-    {
-        public void Handle(TestEvent @event)
-        {
-
-        }
-    }
+		}
+	}
 }

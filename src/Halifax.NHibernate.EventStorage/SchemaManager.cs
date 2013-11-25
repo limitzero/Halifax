@@ -1,6 +1,6 @@
 using NHibernate;
 
-namespace Halifax.NHibernate.EventStorage
+namespace Halifax.NHibernate
 {
     public class SchemaManager
     {

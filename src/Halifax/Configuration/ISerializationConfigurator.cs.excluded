@@ -1,0 +1,9 @@
+﻿namespace Halifax.Configuration
+{
+	public interface ISerializationConfigurator
+	{
+		IConfiguration UsingJSON();
+		IConfiguration UsingNetDataContract();
+		IConfiguration UsingSharpSerializer();
+	}
+}

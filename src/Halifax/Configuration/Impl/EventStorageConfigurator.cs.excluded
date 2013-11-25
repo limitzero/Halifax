@@ -1,0 +1,45 @@
+﻿using System;
+using Halifax.Configuration.Impl.EventStorage;
+using Halifax.Configuration.Impl.EventStorage.Impl;
+using Halifax.Configuration.Impl.EventStorage.Impl.NHibernate;
+using Halifax.Configuration.Impl.Extensibility.NHibernate;
+
+namespace Halifax.Configuration.Impl
+{
+	public class EventStorageConfigurator : IEventStorageConfigurator
+	{
+		private readonly IConfiguration configuration;
+
+		public EventStorageConfigurator(IConfiguration configuration)
+		{
+			this.configuration = configuration;
+		}
+
+		public IConfiguration UsingNoEventStorage()
+		{
+			this.configuration.Container.CurrentContainer()
+				.Register<IEventStorage, NullEventStorage>();
+			return this.configuration;
+		}
+
+		public IConfiguration UsingInMemoryStorage()
+		{
+			this.configuration.Container.CurrentContainer()
+				.Register<IEventStorage,InMemoryEventStorage>();
+
+			return this.configuration;
+		}
+
+		public IConfiguration UsingNHibernateStorage(Func<NHibernateConfiguration, NHibernateConfiguration> storage_configuration)
+		{
+			var event_storage_configuration = storage_configuration(new NHibernateConfiguration());
+			var event_storage = new NHibernateEventStorageConfiguration(event_storage_configuration);
+
+			this.configuration.Container.CurrentContainer()
+				.RegisterInstance<NHibernateEventStorageConfiguration>(event_storage);
+
+			return this.configuration;
+		}
+
+	}
+}

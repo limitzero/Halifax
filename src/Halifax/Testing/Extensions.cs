@@ -7,29 +7,33 @@ namespace Halifax.Testing
         public static void WillBeOfType<TTYPE>(this ThePublishedEvents current) where TTYPE : class
         {
             if (current.GetType() != typeof(TTYPE))
-                throw new Exception(string.Format("Expected: {0}, Actual: {1}", current.GetType().FullName,
-                                                  typeof(TTYPE).GetType().FullName));
+				throw new Exception(string.Format("Expected: {0}, Actual: {1}", 
+					typeof(TTYPE).FullName,
+					current.GetType().FullName));
         }
 
         public static void WillNotBeOfType<TTYPE>(this ThePublishedEvents current) where TTYPE : class
         {
             if (current.GetType() == typeof(TTYPE))
-                throw new Exception(string.Format("Expected: {0}, Actual: {1}", current.GetType().FullName,
-                                                  typeof(TTYPE).GetType().FullName));
+				throw new Exception(string.Format("Expected: {0}, Actual: {1}", 
+					typeof(TTYPE).FullName,
+					current.GetType().FullName));
         }
 
         public static void WillBeOfType<TTYPE>(this object current) where TTYPE : class
         {
             if (current.GetType() != typeof(TTYPE))
-                throw new Exception(string.Format("Expected: {0}, Actual: {1}", current.GetType().FullName,
-                                                  typeof(TTYPE).GetType().FullName));
+                throw new Exception(string.Format("Expected: {0}, Actual: {1}",
+					typeof(TTYPE).FullName,
+					current.GetType().FullName));
         }
 
         public static void WillNotBeOfType<TTYPE>(this object current) where TTYPE : class
         {
             if (current.GetType() == typeof(TTYPE))
-                throw new Exception(string.Format("Expected: {0}, Actual: {1}", current.GetType().FullName,
-                                                  typeof(TTYPE).GetType().FullName));
+				throw new Exception(string.Format("Expected: {0}, Actual: {1}", 
+					typeof(TTYPE).FullName,
+					current.GetType().FullName));
         }
 
         public static void WillHaveMessage(this Exception current, string value)
@@ -69,15 +73,26 @@ namespace Halifax.Testing
 
         public static void WillBe(this Guid current, Guid value)
         {
-            if (current.ToString().ToLower() != value.ToString().ToLower())
+            if (current.Equals(value) == false)
                 throw new Exception(string.Format("Expected: {0}, Actual: {1}", current, value));
         }
 
         public static void WillNotBe(this Guid current, Guid value)
         {
-            if (current.ToString().ToLower() == value.ToString().ToLower())
+            if (current.Equals(value) == true)
                 throw new Exception(string.Format("Expected: {0}, Actual: {1}", current, value));
         }
 
+		public static void WillNotBeNullOrEmpty(this string current)
+		{
+			 if (string.IsNullOrEmpty(current))
+				 throw new Exception(string.Format("Expected: {0}, Actual: {1}", current, ""));
+		}
+
+		public static void WillBeNullOrEmpty(this string current)
+		{
+			if (string.IsNullOrEmpty(current) == false)
+				throw new Exception(string.Format("Expected: {0}, Actual: {1}", "", current));
+		}
     }
 }

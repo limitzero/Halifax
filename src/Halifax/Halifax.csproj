@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,8 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Halifax</RootNamespace>
     <AssemblyName>Halifax</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +26,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -43,6 +51,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Polenter.SharpSerializer">
+      <HintPath>..\..\..\lib\Polenter.SharpSerializer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -56,125 +71,123 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractAggregateRoot.cs" />
-    <Compile Include="AbstractAggregateRootByConvention.cs" />
-    <Compile Include="Bus\Eventing\Async\AsyncEventBus.cs" />
-    <Compile Include="Bus\Eventing\Async\Endpoints\EndpointManager.cs" />
-    <Compile Include="Bus\Eventing\Async\Endpoints\IEndpointManager.cs" />
-    <Compile Include="Bus\Eventing\Async\Endpoints\Module\AbstractEndpointModule.cs" />
-    <Compile Include="Bus\Eventing\Async\Endpoints\Module\IEndpointModule.cs" />
-    <Compile Include="Bus\Eventing\Async\Pipeline\Module\AbstractPipelineModule.cs" />
-    <Compile Include="Bus\Eventing\Async\Pipeline\IPipelineManager.cs" />
-    <Compile Include="Bus\Eventing\Async\Pipeline\PipelineManager.cs" />
-    <Compile Include="Bus\Eventing\Async\Pipeline\PipelineManagerPipelineCompletedForReceiptEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\Pipeline\PipelineManagerPipelineCompletedForSendingEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\Pipeline\PipelineManagerPipelineStartedForReceiptEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\Pipeline\PipelineManagerPipelineStartedForSendingEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\RuntimeServices\BaseBackgroundService.cs" />
-    <Compile Include="Bus\Eventing\Async\RuntimeServices\BackGroundServiceErrorEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\RuntimeServices\BackGroundServiceEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\RuntimeServices\IBackgroundService.cs" />
-    <Compile Include="Bus\Eventing\Async\Subscriptions\ISubscription.cs" />
-    <Compile Include="Bus\Eventing\Async\Subscriptions\ISubscriptionManager.cs" />
-    <Compile Include="Bus\Eventing\Async\Subscriptions\Subscription.cs" />
-    <Compile Include="Bus\Eventing\Async\Subscriptions\SubscriptionManager.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\BaseTransport.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\ITransport.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\ITransportMessage.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\Msmq\MsmqTransport.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\NullTransportMessage.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\TransportErrorEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\TransportEndReceivedMessageEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\TransportMessage.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\TransportMessageDeliveredEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\TransportMessageReceivedEventArgs.cs" />
-    <Compile Include="Bus\Eventing\Async\Transport\TransportStartReceivedMessageEventArgs.cs" />
-    <Compile Include="BaseEntity.cs" />
-    <Compile Include="Bus\Commanding\InProcessCommandBus.cs" />
-    <Compile Include="Commanding\CommandConsumer.cs" />
-    <Compile Include="Commanding\CommandHandler.cs" />
-    <Compile Include="Commanding\Command.cs" />
-    <Compile Include="Commanding\CommndBusCompletedPublishMessageEventArgs.cs" />
-    <Compile Include="Commanding\CommandBusStartPublishMessageEventArgs.cs" />
-    <Compile Include="Bus\Commanding\ICommandBus.cs" />
-    <Compile Include="Commanding\ICommandMessageDispatcher.cs" />
-    <Compile Include="Commanding\IMessageDispatcher.cs" />
-    <Compile Include="Exceptions\ConfigurationElementExceededLimitException.cs" />
-    <Compile Include="ITransactedSession.cs" />
-    <Compile Include="IUnitOfWork.cs" />
-    <Compile Include="Commanding\Module\AbstractCommandBusModule.cs" />
-    <Compile Include="Configuration\AbstractElementBuilder.cs" />
-    <Compile Include="Configuration\HalifaxFacility.cs" />
-    <Compile Include="Configuration\Bootstrapper\AbstractBootstrapper.cs" />
-    <Compile Include="Configuration\Bootstrapper\AggregateRootsRegistrationBootstrapper.cs" />
-    <Compile Include="Configuration\Builders\EventEndpointBuilder.cs" />
-    <Compile Include="Configuration\Elements\CommandHandlerElementBuilder.cs" />
-    <Compile Include="Configuration\Elements\ConfigurationElementBuilder.cs" />
-    <Compile Include="Configuration\Elements\DomainElementBuilder.cs" />
-    <Compile Include="Configuration\Elements\EventBusElementBuilder.cs" />
-    <Compile Include="Configuration\Elements\EndpointElementBuilder.cs" />
-    <Compile Include="Configuration\Elements\EventHandlerElementBuilder.cs" />
-    <Compile Include="Configuration\Elements\MessagesElementBuilder.cs" />
-    <Compile Include="Configuration\Infrastructure\HalifaxContext.cs" />
-    <Compile Include="Bus\Eventing\InProcessEventBus.cs" />
-    <Compile Include="Events\AggregateCreatedEvent.cs" />
-    <Compile Include="Events\AggregateSnapshotCreatedEvent.cs" />
-    <Compile Include="Eventing\DomainEvent.cs" />
-    <Compile Include="Events\EntityCreatedEvent.cs" />
-    <Compile Include="Events\EntitySnapshotCreatedEvent.cs" />
-    <Compile Include="Eventing\EventBusCompletedPublishMessageEventArgs.cs" />
-    <Compile Include="Eventing\EventBusStartPublishMessageEventArgs.cs" />
-    <Compile Include="Eventing\EventConsumer.cs" />
-    <Compile Include="Eventing\IEventProvider.cs" />
-    <Compile Include="Eventing\IEventPublisher.cs" />
-    <Compile Include="Eventing\Module\AbstractEventBusModule.cs" />
-    <Compile Include="Events\LifecycleDomainEvent.cs" />
-    <Compile Include="Exceptions\HalifaxException.cs" />
-    <Compile Include="Exceptions\MissingExternalEventHandlerForEventException.cs" />
-    <Compile Include="Exceptions\MultipleCommandHandlersFoundForCommandException.cs" />
-    <Compile Include="Exceptions\NoEventsWerePublishedForTheLastCommandException.cs" />
-    <Compile Include="Exceptions\UnRegisteredCommandHandlerForCommandException.cs" />
-    <Compile Include="IAggregateRoot.cs" />
-    <Compile Include="IEntity.cs" />
-    <Compile Include="IMessage.cs" />
+    <Compile Include="Commands\CommandResult.cs" />
+    <Compile Include="Commands\PropertyValidationResult.cs" />
+    <Compile Include="Commands\CommandInputValidator.cs" />
+    <Compile Include="Commands\PropertyValidator.cs" />
+    <Compile Include="Configuration\ICanConfigureContainer.cs" />
+    <Compile Include="Configuration\Impl\Containers\ContainerOptions.cs" />
+    <Compile Include="Configuration\Impl\Eventing\EventingOptions.cs" />
+    <Compile Include="Configuration\Impl\Eventing\Impl\AsyncEventBus.cs" />
+    <Compile Include="Configuration\Impl\EventStorage\EventStorageOptions.cs" />
+    <Compile Include="Configuration\Impl\EventStorage\Impl\NHibernate\NHibernateEventStorageConfiguration.cs" />
+    <Compile Include="Configuration\Impl\EventStorage\Impl\NullEventStorage.cs" />
+    <Compile Include="Configuration\Impl\Extensibility\NHibernate\NHibernateConfiguration.cs" />
+    <Compile Include="Configuration\Impl\Repository\Impl\NHibernateReadModelConfiguration.cs" />
+    <Compile Include="Configuration\Impl\Repository\InMemoryReadModelRepository.cs" />
+    <Compile Include="Configuration\Impl\Repository\ReadModelOptions.cs" />
+    <Compile Include="Configuration\Impl\Serialization\SerializationOptions.cs" />
+    <Compile Include="Configuration\Impl\Serialization\Impl\JSONSerializationProvider.cs" />
+    <Compile Include="Configuration\Impl\Serialization\Impl\SharpSerializerSerializationProvider.cs" />
+    <None Include="Configuration\IReadModelRepositoryConfigurator.cs.excluded" />
+    <None Include="Configuration\Impl\ReadModelRepositoryConfigurator.cs.excluded" />
+    <Compile Include="Domain\AggregateRoot.cs" />
+    <Compile Include="Domain\CombGuid.cs" />
+    <Compile Include="Internals\Commands\InProcessCommandBus.cs" />
+    <Compile Include="Commands\CommandConsumer.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Internals\Commands\CommndBusCompletedPublishMessageEventArgs.cs" />
+    <Compile Include="Internals\Commands\CommandBusStartPublishMessageEventArgs.cs" />
+    <Compile Include="Internals\Commands\ICommandBus.cs" />
+    <Compile Include="Internals\Dispatchers\ICommandMessageDispatcher.cs" />
+    <Compile Include="HalifaxContext.cs" />
+    <Compile Include="Configuration\IConfiguration.cs" />
+    <Compile Include="Configuration\IConfigurator.cs" />
+    <Compile Include="Configuration\IContainer.cs" />
+    <None Include="Configuration\IContainerConfigurator.cs.excluded" />
+    <None Include="Configuration\IEventingConfigurator.cs.excluded" />
+    <None Include="Configuration\IEventStorageConfigurator.cs.excluded" />
+    <Compile Include="Configuration\Impl\Configuration.cs" />
+    <None Include="Configuration\Impl\ContainerConfigurator.cs.excluded" />
+    <Compile Include="Configuration\Impl\Containers\Impl\CastleWindsorContainer.cs" />
+    <None Include="Configuration\Impl\EventingConfigurator.cs.excluded" />
+    <None Include="Configuration\Impl\EventStorageConfigurator.cs.excluded" />
+    <Compile Include="Configuration\Impl\EventStorage\Impl\SimpleSqlServerEventStorage.cs" />
+    <None Include="Configuration\Impl\SerializationConfigurator.cs.excluded" />
+    <None Include="Configuration\ISerializationConfigurator.cs.excluded" />
+    <Compile Include="Internals\Exceptions\CommandInputValidationException.cs" />
+    <Compile Include="Internals\Exceptions\ConcurrencyException.cs" />
+    <Compile Include="Internals\Exceptions\ConfigurationElementExceededLimitException.cs" />
+    <Compile Include="Internals\Exceptions\MultipleCommandValidatorsFoundForCommandException.cs" />
+    <Compile Include="Internals\ITransactedSession.cs" />
+    <Compile Include="Internals\IUnitOfWork.cs" />
+    <Compile Include="Internals\Commands\Module\AbstractCommandBusModule.cs" />
+    <Compile Include="Configuration\Impl\Eventing\Impl\InProcessEventBus.cs" />
+    <Compile Include="Internals\Events\AggregateCreatedEvent.cs" />
+    <Compile Include="Internals\Events\AggregateSnapshotCreatedEvent.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Internals\Events\EntityCreatedEvent.cs" />
+    <Compile Include="Internals\Events\EntitySnapshotCreatedEvent.cs" />
+    <Compile Include="Events\EventBusCompletedPublishMessageEventArgs.cs" />
+    <Compile Include="Events\EventBusStartPublishMessageEventArgs.cs" />
+    <Compile Include="Events\EventConsumer.cs" />
+    <Compile Include="Domain\Internal\IEventProvider.cs" />
+    <Compile Include="Events\Module\AbstractEventBusModule.cs" />
+    <Compile Include="Internals\Events\LifecycleEvent.cs" />
+    <Compile Include="Internals\Exceptions\HalifaxException.cs" />
+    <Compile Include="Internals\Exceptions\MissingExternalEventHandlerForEventException.cs" />
+    <Compile Include="Internals\Exceptions\MultipleCommandHandlersFoundForCommandException.cs" />
+    <Compile Include="Internals\Exceptions\NoEventsWerePublishedForTheLastCommandException.cs" />
+    <Compile Include="Internals\Exceptions\UnRegisteredCommandHandlerForCommandException.cs" />
+    <Compile Include="Domain\IAggregateRoot.cs" />
     <Compile Include="Internals\Convertor\EventConvertor.cs" />
     <Compile Include="Internals\Convertor\IEventConvertor.cs" />
-    <Compile Include="Internals\InMemoryMatchAllEventHandler.cs" />
     <Compile Include="Internals\Reflection\DefaultReflection.cs" />
-    <Compile Include="Internals\Dispatchers\EventMessageDispatcher.cs" />
-    <Compile Include="Eventing\IEventMessageDispatcher.cs" />
-    <Compile Include="Storage\Events\InMemoryEventStorage.cs" />
+    <Compile Include="Internals\Dispatchers\Impl\EventMessageDispatcher.cs" />
+    <Compile Include="Internals\Dispatchers\IEventMessageDispatcher.cs" />
+    <Compile Include="ObjectExtentions.cs" />
+    <Compile Include="Read\Query.cs" />
+    <Compile Include="Read\IQueryOn.cs" />
+    <Compile Include="Configuration\Impl\EventStorage\Impl\InMemoryEventStorage.cs" />
     <Compile Include="Internals\Reflection\IReflection.cs" />
-    <Compile Include="Eventing\ISnapshotable.cs" />
+    <Compile Include="Domain\Internal\ISnapshotable.cs" />
     <Compile Include="Internals\IStartable.cs" />
-    <Compile Include="Internals\Serialization\DataContractSerializationProvider.cs" />
-    <Compile Include="Internals\Serialization\ISerializationProvider.cs" />
+    <Compile Include="Configuration\Impl\Serialization\Impl\DataContractSerializationProvider.cs" />
+    <Compile Include="Configuration\Impl\Serialization\ISerializationProvider.cs" />
     <Compile Include="Internals\Threading\Threading.cs" />
-    <Compile Include="Bus\Commanding\IStartableCommandBus.cs" />
-    <Compile Include="Eventing\IDomainEvent.cs" />
-    <Compile Include="Exceptions\UnregisteredEventHandlerOnAggregateForEventException.cs" />
-    <Compile Include="Storage\Aggregates\IDomainRepository.cs" />
-    <Compile Include="Storage\Events\IEventStorage.cs" />
-    <Compile Include="Bus\Eventing\IEventBus.cs" />
-    <Compile Include="Internals\Dispatchers\CommandMessageDispatcher.cs" />
-    <Compile Include="Storage\Aggregates\DomainRepository.cs" />
-    <Compile Include="Bus\Eventing\IStartableEventBus.cs" />
+    <Compile Include="Internals\Exceptions\UnregisteredEventHandlerOnAggregateForEventException.cs" />
+    <Compile Include="Domain\IAggregateRootRepository.cs" />
+    <Compile Include="Configuration\Impl\EventStorage\IEventStorage.cs" />
+    <Compile Include="Configuration\Impl\Eventing\IEventBus.cs" />
+    <Compile Include="Internals\Dispatchers\Impl\CommandMessageDispatcher.cs" />
+    <Compile Include="Domain\Internal\AggregateRootRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Storage\Events\PersistableDomainEvent.cs" />
-    <Compile Include="Testing\BaseAggregateTestFixture.cs" />
-    <Compile Include="Testing\BaseAggregateWithCommandConsumerTestFixture.cs" />
+    <Compile Include="Configuration\Impl\EventStorage\Impl\PersistableDomainEvent.cs" />
+    <Compile Include="Read\IReadModel.cs" />
+    <Compile Include="Read\IReadModelRepository.cs" />
+    <Compile Include="Read\QueryOver.cs" />
+    <Compile Include="StateMachine\Impl\StateMachineDataToMessageDataCorrelation.cs" />
+    <Compile Include="StateMachine\Impl\DefaultBus.cs" />
+    <Compile Include="StateMachine\IBus.cs" />
+    <Compile Include="StateMachine\IStateMachineData.cs" />
+    <Compile Include="StateMachine\State.cs" />
+    <Compile Include="StateMachine\StateMachine.cs" />
+    <Compile Include="StateMachine\Impl\StateMachineExecuter.cs" />
+    <Compile Include="Testing\BaseAggregateRootTestFixture.cs" />
     <Compile Include="Testing\BaseEventConsumerTestFixture.cs" />
+    <Compile Include="Testing\BaseTestConfiguration.cs" />
     <Compile Include="Testing\Extensions.cs" />
     <Compile Include="Testing\NoExceptionWasCaughtButOneWasExpectedException.cs" />
     <Compile Include="Testing\ThePublishedEvents.cs" />
     <Compile Include="Testing\TheCaughtException.cs" />
-    <Compile Include="TransactedSession.cs" />
-    <Compile Include="UnitOfWorkSession.cs" />
+    <Compile Include="Internals\TransactedSession.cs" />
+    <Compile Include="Internals\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Credits.txt" />
-    <Content Include="Mappings\PersistableEvent.hbm.xml" />
-    <Content Include="halifax.config.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internals\Serialization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

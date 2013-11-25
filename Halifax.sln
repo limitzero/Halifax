@@ -1,23 +1,32 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax", "src\Halifax\Halifax.csproj", "{22DC224C-93DA-43F7-A919-9A6DD5D0FCA3}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.Tests", "tests\Halifax.Tests\Halifax.Tests.csproj", "{765A475E-A165-4401-88E1-004BFF121FF1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "contrib", "contrib", "{7241D32B-1046-45D3-BDC6-6E3FA5DA8E21}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "storage", "storage", "{2C15E76B-E7C5-416C-A386-6E87A4928609}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax", "src\Halifax\Halifax.csproj", "{22DC224C-93DA-43F7-A919-9A6DD5D0FCA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.Tests", "tests\Halifax.Tests\Halifax.Tests.csproj", "{765A475E-A165-4401-88E1-004BFF121FF1}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halfax.NHibernate.AggregateStorage", "src\Halifax.NHibernate.AggregateStorage\Halfax.NHibernate.AggregateStorage.csproj", "{4430D605-DD78-4AF6-92A8-99B9A54D68E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate.EventStorage", "src\Halifax.NHibernate.EventStorage\Halifax.NHibernate.EventStorage.csproj", "{752AC0C5-AF9D-49BB-978F-A23C834BC467}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate", "src\Halifax.NHibernate.EventStorage\Halifax.NHibernate.csproj", "{752AC0C5-AF9D-49BB-978F-A23C834BC467}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate.AggregateStorage.Tests", "tests\Halifax.NHibernate.AggregateStorage.Tests\Halifax.NHibernate.AggregateStorage.Tests.csproj", "{66452119-0D43-4F1F-BBCD-C8467FF6EB43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate.EventStorage.Tests", "tests\Halifax.NHibernate.EventStorage.Tests\Halifax.NHibernate.EventStorage.Tests.csproj", "{38661C55-363E-4175-8BA4-C4C326E5A2EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.NHibernate.Tests", "tests\Halifax.NHibernate.EventStorage.Tests\Halifax.NHibernate.Tests.csproj", "{38661C55-363E-4175-8BA4-C4C326E5A2EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39F4602A-D3A4-4BD2-9F1D-B718F26451B0}"
+	ProjectSection(SolutionItems) = preProject
+		ideas.txt = ideas.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.SignalR", "src\Halifax.SignalR\Halifax.SignalR.csproj", "{824D89FA-2376-47C4-B7DE-100D0B46B8FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Halifax.SignalR.Tests", "tests\Halifax.SignalR.Tests\Halifax.SignalR.Tests.csproj", "{0173D4FB-A85E-4662-ADF1-C5A17C8E3745}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +58,14 @@ Global
 		{38661C55-363E-4175-8BA4-C4C326E5A2EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38661C55-363E-4175-8BA4-C4C326E5A2EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38661C55-363E-4175-8BA4-C4C326E5A2EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{824D89FA-2376-47C4-B7DE-100D0B46B8FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{824D89FA-2376-47C4-B7DE-100D0B46B8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{824D89FA-2376-47C4-B7DE-100D0B46B8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{824D89FA-2376-47C4-B7DE-100D0B46B8FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0173D4FB-A85E-4662-ADF1-C5A17C8E3745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0173D4FB-A85E-4662-ADF1-C5A17C8E3745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0173D4FB-A85E-4662-ADF1-C5A17C8E3745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0173D4FB-A85E-4662-ADF1-C5A17C8E3745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +74,7 @@ Global
 		{765A475E-A165-4401-88E1-004BFF121FF1} = {2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}
 		{66452119-0D43-4F1F-BBCD-C8467FF6EB43} = {2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}
 		{38661C55-363E-4175-8BA4-C4C326E5A2EE} = {2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}
+		{0173D4FB-A85E-4662-ADF1-C5A17C8E3745} = {2AA0DFF1-336C-4FE4-ABB3-D5855301FEFF}
 		{4430D605-DD78-4AF6-92A8-99B9A54D68E0} = {2C15E76B-E7C5-416C-A386-6E87A4928609}
 		{752AC0C5-AF9D-49BB-978F-A23C834BC467} = {2C15E76B-E7C5-416C-A386-6E87A4928609}
 	EndGlobalSection

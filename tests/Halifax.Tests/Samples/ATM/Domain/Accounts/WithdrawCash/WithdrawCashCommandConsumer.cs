@@ -1,27 +1,24 @@
 using Halifax;
-using Halifax.Commanding;
-using Halifax.Storage.Aggregates;
+using Halifax.Commands;
+using Halifax.Domain;
 
 namespace Halifax.Tests.Samples.ATM.Domain.Accounts.WithdrawCash
 {
     public class WithdrawCashCommandConsumer : 
         CommandConsumer.For<WithdrawCashCommand>
     {
-        private readonly IDomainRepository _repository;
+        private readonly IAggregateRootRepository root_repository;
 
-        public WithdrawCashCommandConsumer(IDomainRepository repository)
+        public WithdrawCashCommandConsumer(IAggregateRootRepository rootRepository)
         {
-            _repository = repository;
+            root_repository = rootRepository;
         }
 
-        public override void Execute(IUnitOfWork session, WithdrawCashCommand command)
+        public override AggregateRoot Execute(WithdrawCashCommand command)
         {
-            var account = _repository.Find<Account>(command.Id);
-
-            using (ITransactedSession txn = session.BeginTransaction(account))
-            {
-                account.WithdrawCash(command);
-            }
+            var account = root_repository.Get<Account>(command.Id);
+			account.WithdrawCash(command.AccountNumber, command.WithdrawalAmount);
+        	return account;
         }
     }
 }

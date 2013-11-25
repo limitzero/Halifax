@@ -1,0 +1,43 @@
+using System;
+using Halifax.Configuration.Impl.Extensibility.NHibernate;
+using Halifax.Configuration.Impl.Repository;
+using Halifax.Configuration.Impl.Repository.Impl;
+using Halifax.Read;
+
+namespace Halifax.Configuration.Impl
+{
+	public class ReadModelRepositoryConfigurator : IReadModelRepositoryConfigurator
+	{
+		private readonly Configuration configuration;
+
+		public ReadModelRepositoryConfigurator(Configuration configuration)
+		{
+			this.configuration = configuration;
+		}
+
+		public IConfiguration UsingInMemoryRepository()
+		{
+			this.configuration.Container.CurrentContainer()
+					.Register(typeof(IReadModelRepository<>), 
+					typeof(InMemoryReadModelRepository<>));
+
+			return this.configuration;
+		}
+
+		public IConfiguration UsingNHibernate(Func<NHibernateConfiguration, NHibernateConfiguration> read_model_configuration)
+		{
+			var nhibernate_configuration = read_model_configuration(new NHibernateConfiguration());
+			var read_model = new NHibernateReadModelConfiguration(nhibernate_configuration);
+
+			this.configuration.Container.CurrentContainer()
+				.RegisterInstance<NHibernateReadModelConfiguration>(read_model);
+
+			return this.configuration;
+		}
+
+		public IConfiguration UsingCustomPersistance()
+		{
+			return this.configuration;
+		}
+	}
+}

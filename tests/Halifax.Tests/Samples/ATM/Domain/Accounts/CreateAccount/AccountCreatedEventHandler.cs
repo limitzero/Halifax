@@ -1,4 +1,5 @@
-using Halifax.Eventing;
+using Halifax.Events;
+using Halifax.Read;
 
 namespace Halifax.Tests.Samples.ATM.Domain.Accounts.CreateAccount
 {
@@ -6,15 +7,25 @@ namespace Halifax.Tests.Samples.ATM.Domain.Accounts.CreateAccount
     /// Handler that is created for the event when an account has been created.
     /// </summary>
     public class AccountCreatedEventHandler : 
-        EventConsumer.For<AccountCreatedEvent>
+        EventConsumer.For<AccountCreated>
     {
-        public AccountCreatedEventHandler()
+    	private readonly IReadModelRepository<ReadModel.Account> repository;
+
+    	public AccountCreatedEventHandler(IReadModelRepository<ReadModel.Account> repository)
         {
+        	this.repository = repository;
         }
 
-        public void Handle(AccountCreatedEvent domainEvent)
+    	public void Handle(AccountCreated @event)
         {
-            // do something with the event, if needed
+			this.repository.Insert(new ReadModel.Account()
+			                       	{
+										Id = @event.EventSourceId,
+			                       		AccountNumber =  @event.AccountNumber, 
+										Balance = @event.Balance,
+										FirstName = @event.FirstName, 
+										LastName = @event.LastName
+			                       	});
         }
     }
 }
